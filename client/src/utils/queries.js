@@ -1,0 +1,1 @@
+// for the OpenAI and voice recognition software
