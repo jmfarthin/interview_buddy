@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import NewInterviewForm from './NewInterviewForm';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaPlus } from 'react-icons/fa';
 import { GiHamburgerMenu } from 'react-icons/gi';
 
@@ -7,7 +8,7 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 const HeaderComponent = () => {
     const [showForm, setShowForm] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const handleMenuClick = () => {
         setShowMenu(!showMenu);
@@ -16,7 +17,7 @@ const HeaderComponent = () => {
     const handleLogout = () => {
         localStorage.removeItem('token'); // placeholder until auth is fully configured
 
-        history.push('/login');
+        navigate('/login');
     };
 
     return (
