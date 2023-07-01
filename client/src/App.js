@@ -1,24 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import HeaderComponent from './components/HeaderComponent';
+import NewInterviewForm from './components/NewInterviewForm';
+import ChatComponent from './components/ChatComponent';
+import ChatHistory from './components/ChatHistory';
+import LoginSignupForm from './components/LoginSignupForm';
+import './index.css';
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={isLoggedIn ? <Navigate to="/app" /> : <LoginSignupForm onLogin={() => setIsLoggedIn(true)} />} />
+          <Route path="/app" element={isLoggedIn ? (
+            <>
+              <HeaderComponent />
+              <NewInterviewForm />
+              <ChatComponent />
+              <ChatHistory />
+            </>
+          ) : (
+            <Navigate to="/" />
+          )} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
