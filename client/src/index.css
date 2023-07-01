@@ -24,3 +24,7 @@ code {
 .logout-button {
   
 }
+
+.chat-input::placeholder {
+  color: rgba(140, 82, 255, 0.75)
+}
