@@ -2,10 +2,20 @@ const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
 type User{
-
+    username: String
 }
 
-type 
+type ChatResponse {
+    text: String
+}
+
+type Query {
+    chat: ChatResponse
+}
+
+type Mutation {
+    promptChat(prompt: String!): ChatResponse
+} 
 `
 
-module.export = typeDefs;
+module.exports = typeDefs;
