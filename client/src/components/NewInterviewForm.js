@@ -1,6 +1,6 @@
 import React, { useState, forwardRef } from 'react';
 
-const NewInterviewForm = forwardRef(({ styles, attributes }, ref) => {
+const NewInterviewForm = forwardRef(({ styles, attributes, showForm }, ref) => {
     const [jobTitle, setJobTitle] = useState('');
     const [jobLevel, setJobLevel] = useState('');
     const [jobFunction, setJobFunction] = useState('');
@@ -17,25 +17,29 @@ const NewInterviewForm = forwardRef(({ styles, attributes }, ref) => {
         }
     };
 
+    if (!showForm) {
+        return null;
+    }
+
     return (
         <div ref={ref} style={styles} {...attributes} className="fixed inset-0 flex items-center justify-center z-10">
-            <form onSubmit={handleSubmit} className="bg-brandGreen p-5 rounded-lg grid gap-4 grid-cols-2 auto-rows-min max-w-sm w-full">
-                <label className="col-span-2 brand-font-bold text-sm">
+            <form onSubmit={handleSubmit} className="bg-gray-600 p-5 rounded-lg grid gap-4 grid-cols-2 auto-rows-min max-w-md w-full">
+                <label className="col-span-2 brand-font-bold text-sm text-white">
                     Job Title:
                     <input
                         type='text'
                         placeholder='Job Title'
                         value={jobTitle}
                         onChange={event => setJobTitle(event.target.value)}
-                        className="mt-2 block w-full px-4 py-2 border rounded-lg"
+                        className="job-title mt-2 block w-full px-4 py-2 bg-brandGreen rounded-lg"
                     />
                 </label>
-                <label className="brand-font-bold text-sm">
+                <label className="brand-font-bold text-sm text-white">
                     Job Level:
                     <select
                         value={jobLevel}
                         onChange={event => setJobLevel(event.target.value)}
-                        className="mt-2 block w-full px-4 py-2 border rounded-lg"
+                        className="mt-2 block w-full px-4 py-2 rounded-lg bg-brandGreen"
                     >
                         <option value=''>Select Level</option>
                         <option value='Junior'>Junior</option>
@@ -44,12 +48,12 @@ const NewInterviewForm = forwardRef(({ styles, attributes }, ref) => {
                         <option value='Manager'>Manager</option>
                     </select>
                 </label>
-                <label className="brand-font-bold text-sm">
+                <label className="brand-font-bold text-sm text-white">
                     Job Function:
                     <select
                         value={jobFunction}
                         onChange={event => setJobFunction(event.target.value)}
-                        className="mt-2 block w-full px-4 py-2 border rounded-lg"
+                        className="mt-2 block w-full px-4 py-2 rounded-lg bg-brandGreen"
                     >
                         <option value=''>Select Function</option>
                         <option value='Web Development'>Web Development</option>
@@ -61,17 +65,17 @@ const NewInterviewForm = forwardRef(({ styles, attributes }, ref) => {
                         <option value='Digital Marketing'>Digital Marketing</option>
                     </select>
                 </label>
-                <label className="col-span-2 brand-font-bold text-sm">
+                <label className="col-span-2 brand-font-bold text-sm text-white">
                     Tools/Technologies:
                     <input
                         type='text'
                         placeholder='Keywords Only'
                         value={jobTechnology}
                         onChange={event => setJobTechnology(event.target.value)}
-                        className="mt-2 block w-full px-4 py-2 border rounded-lg"
+                        className="tools-input mt-2 block w-full px-4 py-2 bg-brandGreen rounded-lg"
                     />
                 </label>
-                <button type='submit' className="rounded-full bg-brandPurple text-brandGray mt-4 px-6 py-3 col-span-2 self-center brand-font-bold text-lg">
+                <button type='submit' className="rounded-full bg-gradient mt-4 px-6 py-3 col-span-2 self-center brand-font-bold text-lg text-white">
                     Start Interview
                 </button>
             </form>

@@ -22,8 +22,16 @@ body {
   font-family: 'Mulish', sans-serif;
 }
 
+.bg-gradient {
+  background-image: linear-gradient(to right, #8C52FF, #34BB9A);
+}
+
 .bg-brandPurple {
   background: #8C52FF;
+}
+
+.bg-brandRed {
+  background: #FF5757;
 }
 
 .bg-brandGreen {
@@ -46,7 +54,22 @@ body {
   color: #34BB9A;
 }
 
+.job-title::placeholder {
+  color: white;
+}
 
+.tools-input::placeholder {
+  color: white;
+}
+
+.custom-border-top {
+  border-bottom: 1px solid #34BB9A;
+  padding-bottom: 7px;
+}
+
+.custom-border-bottom {
+  border-top: 1px solid #34BB9A;
+}
 
 .menu {
   

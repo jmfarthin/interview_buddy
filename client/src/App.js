@@ -7,7 +7,7 @@ import ChatHistory from './components/ChatHistory';
 import LoginSignupForm from './components/LoginSignupForm';
 import './index.css';
 
-function App() {
+const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
