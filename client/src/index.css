@@ -69,6 +69,7 @@ body {
 
 .custom-border-bottom {
   border-top: 1px solid #34BB9A;
+  padding-top: 40px;
 }
 
 .menu {

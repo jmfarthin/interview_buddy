@@ -48,7 +48,7 @@ const ChatComponent = () => {
             className='chat-component absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full bg-brandGreen p-5 shadow-lg flex justify-center items-center' 
             onSubmit={handleSendMessage}
         >
-            <div className="relative w-1/2">
+            <div className="relative w-full md:w-4/6">
                 <input
                     className='chat-input flex-grow bg-brandGray p-3 rounded-full w-full'
                     type='text'

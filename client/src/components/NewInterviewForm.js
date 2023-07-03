@@ -1,6 +1,7 @@
 import React, { useState, forwardRef } from 'react';
+import { FiX } from 'react-icons/fi';
 
-const NewInterviewForm = forwardRef(({ styles, attributes, showForm }, ref) => {
+const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose }, ref) => {
     const [jobTitle, setJobTitle] = useState('');
     const [jobLevel, setJobLevel] = useState('');
     const [jobFunction, setJobFunction] = useState('');
@@ -22,8 +23,8 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm }, ref) => {
     }
 
     return (
-        <div ref={ref} style={styles} {...attributes} className="fixed inset-0 flex items-center justify-center z-10">
-            <form onSubmit={handleSubmit} className="bg-gray-600 p-5 rounded-lg grid gap-4 grid-cols-2 auto-rows-min max-w-md w-full">
+        <div className="fixed inset-0 flex items-center justify-center z-10">
+            <form onSubmit={handleSubmit} style={{ position: 'relative' }} className="container mx-auto bg-gray-600 p-5 rounded-lg grid gap-4 grid-cols-2 auto-rows-min max-w-md">
                 <label className="col-span-2 brand-font-bold text-sm text-white">
                     Job Title:
                     <input
@@ -77,6 +78,9 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm }, ref) => {
                 </label>
                 <button type='submit' className="rounded-full bg-gradient mt-4 px-6 py-3 col-span-2 self-center brand-font-bold text-lg text-white">
                     Start Interview
+                </button>
+                <button type='button' style={{ position: 'absolute', top: '-38px', left: '0px' }} onClick={onClose}> 
+                    <FiX size={35} color='#8C52FF' />
                 </button>
             </form>
         </div>
