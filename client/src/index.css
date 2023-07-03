@@ -26,6 +26,14 @@ body {
   background: #8C52FF;
 }
 
+.bg-brandGreen {
+  background: #34BB9A;
+}
+
+.bg-brandGray {
+  background: #D9D9D9;
+}
+
 .text-brandPurple {
   color: #8C52FF;
 }
@@ -33,6 +41,11 @@ body {
 .text-brandGray {
   color: #D9D9D9;
 }
+
+.text-brandGreen {
+  color: #34BB9A;
+}
+
 
 
 .menu {
@@ -48,5 +61,7 @@ body {
 }
 
 .chat-input::placeholder {
-  color: rgba(140, 82, 255, 0.75)
+  color: #8C52FF;
+  font-family: 'Mulish', sans-serif;
+  padding-left: 10px;
 }

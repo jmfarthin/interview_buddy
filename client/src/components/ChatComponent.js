@@ -44,17 +44,22 @@ const ChatComponent = () => {
     };
 
     return (
-        <form className='chat-component' onSubmit={handleSendMessage}>
-            <input
-                className='chat-input'
-                type='text'
-                placeholder='Send Reply'
-                value={newMessage}
-                onChange={handleNewMessageChange}
-            />
-            <button type='submit'>
-                <FiSend size={20} color='#8C52FF' />
-            </button>
+        <form 
+            className='chat-component absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full bg-brandGreen p-5 shadow-lg flex justify-center items-center' 
+            onSubmit={handleSendMessage}
+        >
+            <div className="relative w-1/2">
+                <input
+                    className='chat-input flex-grow bg-brandGray p-3 rounded-full w-full'
+                    type='text'
+                    placeholder='Send Reply'
+                    value={newMessage}
+                    onChange={handleNewMessageChange}
+                />
+                <button type='submit' className='absolute right-4 top-1/2 transform -translate-y-1/2 p-3 bg-brandGray text-white rounded-md'>
+                    <FiSend size={23} color='#8C52FF' />
+                </button>
+            </div>
         </form>
     );
 }
