@@ -7,8 +7,13 @@ import ChatHistory from './components/ChatHistory';
 import LoginSignupForm from './components/LoginSignupForm';
 import './index.css';
 
-function App() {
+const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleMenuToggle = (isOpen) => {
+    setIsMenuOpen(isOpen);
+  };
 
   return (
     <Router>
@@ -17,10 +22,12 @@ function App() {
           <Route path="/" element={isLoggedIn ? <Navigate to="/app" /> : <LoginSignupForm onLogin={() => setIsLoggedIn(true)} />} />
           <Route path="/app" element={isLoggedIn ? (
             <>
-              <HeaderComponent />
-              <NewInterviewForm />
-              <ChatComponent />
-              <ChatHistory />
+              <div className="flex flex-col items-center justify-center">
+                <HeaderComponent isMenuOpen={isMenuOpen} />
+                <NewInterviewForm />
+                <ChatComponent />
+              </div>
+              <ChatHistory onMenuToggle={handleMenuToggle} />
             </>
           ) : (
             <Navigate to="/" />
