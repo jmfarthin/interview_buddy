@@ -84,6 +84,14 @@ body {
   
 }
 
+.email-input::placeholder {
+  color: white;
+}
+
+.password-input::placeholder {
+  color: white;
+}
+
 .chat-input::placeholder {
   color: #8C52FF;
   font-family: 'Mulish', sans-serif;
