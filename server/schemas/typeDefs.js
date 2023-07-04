@@ -1,12 +1,9 @@
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
-type User{
-    username: String
-}
 
 type ChatResponse {
-    text: String
+    gptMessage: String
 }
 
 type Query {
@@ -14,7 +11,7 @@ type Query {
 }
 
 type Mutation {
-    promptChat(prompt: String!): ChatResponse
+    promptChat(prompt: String!, jobTitle: String!, jobLevel: String!, jobFunction: String!, technologies: String): ChatResponse
 } 
 `
 
