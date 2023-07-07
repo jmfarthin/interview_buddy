@@ -32,5 +32,4 @@ module.exports = {
   feedback,
   conversation,
   context,
-  chat,
 };
