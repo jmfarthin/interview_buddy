@@ -2,16 +2,46 @@ const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
 
-type ChatResponse {
+type User{
+   _id: ID
+   firstname: String
+   email: String
+   password: String
+   chats: [Chat]
+}
+
+type Chat{
+    _id: ID
+    jobTitle: String
+    messages: [Message]
+}
+
+type Message{
+    _id: ID
+    role: String
+    content: String
+}
+
+type GptResponse {
     gptMessage: String
 }
 
+type Auth {
+    token: ID!
+    user: User
+  }
+
 type Query {
-    chat: ChatResponse
+    gptResponse: GptResponse
+    me: User
+    chat(chatId: ID!): Chat 
 }
 
 type Mutation {
-    promptChat(prompt: String!, jobTitle: String!, jobLevel: String!, jobFunction: String!, technologies: String): ChatResponse
+    addUser(firstname: String!, email: String!, password: String!): Auth
+    promptChat(chatId: String!, answer: String!): GptResponse
+    createChat(jobTitle: String!, jobLevel: String!, jobFunction: String!, technologies: String): Chat
+    saveMessage(chatId: ID!, role: String!, content: String!): Chat
 } 
 `
 
