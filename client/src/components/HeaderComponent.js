@@ -3,6 +3,7 @@ import NewInterviewForm from './NewInterviewForm';
 import { FaPlus } from 'react-icons/fa';
 import logo from '../InterviewBuddy-Logo2.png';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 const HeaderComponent = ({ isMenuOpen }) => {
     const [showForm, setShowForm] = useState(false);
@@ -25,10 +26,15 @@ const HeaderComponent = ({ isMenuOpen }) => {
             <header className="container flex px-4 md:px-8 lg:px-12 xl:px-16 mt-5">
                 <div className="mx-auto">
                     {!isMenuOpen && (
-                        <button onClick={() => setShowForm(!showForm)} className="flex items-center bg-gradient rounded-full p-4">
+                        <motion.button 
+                            whileHover={{ scale: 1.1 }} 
+                            whileTap={{ scale: 0.9 }} 
+                            onClick={() => setShowForm(!showForm)} 
+                            className="flex items-center bg-gradient rounded-full p-4 shadow-2xl"
+                        >
                             <FaPlus style={{ color: '#34BB9A' }} className="mr-2" />
                             <span className="brand-font-bold text-white text-lg">New Interview</span>
-                        </button>
+                        </motion.button>
                     )}
                     <NewInterviewForm showForm={showForm} onClose={handleShowForm} />
                 </div>
