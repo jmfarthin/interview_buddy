@@ -84,6 +84,11 @@ body {
   
 }
 
+.lottie-class {
+  width: 250px;
+  height: 250px;
+}
+
 .logo-enter {
   transform: translateX(-100%);
   opacity: 0;
