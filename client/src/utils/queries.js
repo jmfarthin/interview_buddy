@@ -16,3 +16,16 @@ query me {
   }
 }
 `
+
+export const GET_CHAT = gql`
+query getChat($chatId: ID!) {
+  getChat(chatId: $chatId) {
+    _id
+    jobTitle
+    messages {
+      content
+      role
+    }
+  }
+}
+`

@@ -1,6 +1,8 @@
 import React, { useState, forwardRef } from 'react';
 import { FiX } from 'react-icons/fi';
 import { motion } from 'framer-motion';
+import { useMutation } from '@apollo/client';
+import { CREATE_CHAT } from '../utils/mutations';
 
 const formVariants = {
     hidden: { opacity: 0, scale: 0.9 },
@@ -12,15 +14,36 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose }, 
     const [jobLevel, setJobLevel] = useState('');
     const [jobFunction, setJobFunction] = useState('');
     const [jobTechnology, setJobTechnology] = useState('');
+    const [error, setError] = useState(''); // Added error state
 
-    const handleSubmit = event => {
+    const [createChat, { loading: creatingChat }] = useMutation(CREATE_CHAT);
+
+    const handleSubmit = async event => {
         event.preventDefault();
 
         if (!jobTitle || !jobLevel || !jobFunction || !jobTechnology) {
             alert('All fields are required.');
         } else {
             console.log({ jobTitle, jobLevel, jobFunction, jobTechnology });
-            // API call to send these values to be added later.
+            
+            try {
+                const { data } = await createChat({
+                    variables: {
+                        input: {
+                            jobTitle,
+                            jobLevel,
+                            jobFunction,
+                            jobTechnology
+                        }
+                    }
+                });
+
+                console.log(data.createChat);
+                setError(''); // Clear error state upon successful chat creation
+            } catch (err) {
+                console.error('Error creating chat:', err);
+                setError('Error creating chat.'); // Update error state if an error occurred
+            }
         }
     };
 
@@ -54,7 +77,7 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose }, 
                 <label className="brand-font-bold text-sm text-white">
                     Job Level:
                     <motion.select
-                        whileFocus={{ scale: 1.05 }} // Add animation to this select field
+                        whileFocus={{ scale: 1.05 }}
                         value={jobLevel}
                         onChange={event => setJobLevel(event.target.value)}
                         className="mt-2 block w-full px-4 py-2 rounded-lg bg-brandGreen"
@@ -70,7 +93,7 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose }, 
                 <label className="brand-font-bold text-sm text-white">
                     Job Function:
                     <motion.select
-                        whileFocus={{ scale: 1.05 }} // Add animation to this select field
+                        whileFocus={{ scale: 1.05 }}
                         value={jobFunction}
                         onChange={event => setJobFunction(event.target.value)}
                         className="mt-2 block w-full px-4 py-2 rounded-lg bg-brandGreen"
@@ -89,7 +112,7 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose }, 
                 <label className="col-span-2 brand-font-bold text-sm text-white">
                     Tools/Technologies:
                     <motion.input
-                        whileFocus={{ scale: 1.05 }} // Add animation to this input
+                        whileFocus={{ scale: 1.05 }}
                         type='text'
                         placeholder='Keywords Only'
                         value={jobTechnology}
@@ -119,6 +142,8 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose }, 
                 >
                     <FiX size={35} color='#8C52FF' />
                 </motion.button>
+
+                {error && <p className="error-message">{error}</p>} {/* Display error message when it exists */}
 
             </motion.form>
         </div>

@@ -7,7 +7,7 @@ import reportWebVitals from './reportWebVitals';
 
 // Initialize Apollo Client
 const client = new ApolloClient({
-  uri: 'http://localhost:3001/graphql', // replace with your GraphQL server URI
+  uri: 'http://localhost:3001/',
   cache: new InMemoryCache()
 });
 
