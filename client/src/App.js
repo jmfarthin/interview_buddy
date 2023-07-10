@@ -31,7 +31,7 @@ const App = () => {
           <Route path="/app" element={isLoggedIn ? (
             <>
               <div className="flex flex-col items-center justify-center">
-                <HeaderComponent isMenuOpen={isMenuOpen} />
+                <HeaderComponent isMenuOpen={isMenuOpen} inProp={inProp} />
                 <NewInterviewForm />
                 <Transition in={inProp} timeout={300}>
                   {(state) => <ChatComponent state={state} />}
