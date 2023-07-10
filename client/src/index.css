@@ -84,6 +84,55 @@ body {
   
 }
 
+.lottie-class {
+  width: 250px;
+  height: 250px;
+}
+
+.logo-enter {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.logo-enter-active {
+  transform: translateX(0);
+  opacity: 1;
+  transition: opacity 300ms, transform 300ms;
+}
+
+.logo-exit {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.logo-exit-active {
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: opacity 300ms, transform 300ms;
+}
+
+.new-interview-enter {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.new-interview-enter-active {
+  transform: translateY(0);
+  opacity: 1;
+  transition: opacity 300ms, transform 300ms;
+}
+
+.new-interview-exit {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.new-interview-exit-active {
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: opacity 300ms, transform 300ms;
+}
+
 .email-input::placeholder {
   color: white;
 }
@@ -96,4 +145,26 @@ body {
   color: #8C52FF;
   font-family: 'Mulish', sans-serif;
   padding-left: 10px;
+}
+
+.chat-component-entering {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.chat-component-entered {
+  transform: translateX(0);
+  opacity: 1;
+  transition: opacity 300ms, transform 300ms;
+}
+
+.chat-component-exiting {
+  transform: translateX(100%);
+  opacity: 0;
+  transition: opacity 300ms, transform 300ms;
+}
+
+.chat-component-exited {
+  transform: translateX(100%);
+  opacity: 0;
 }
