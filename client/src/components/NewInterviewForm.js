@@ -1,5 +1,11 @@
 import React, { useState, forwardRef } from 'react';
 import { FiX } from 'react-icons/fi';
+import { motion } from 'framer-motion';
+
+const formVariants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1 },
+};
 
 const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose }, ref) => {
     const [jobTitle, setJobTitle] = useState('');
@@ -24,10 +30,19 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose }, 
 
     return (
         <div className="fixed inset-0 flex items-center justify-center z-10">
-            <form onSubmit={handleSubmit} style={{ position: 'relative' }} className="container mx-auto bg-gray-600 p-5 rounded-lg grid gap-4 grid-cols-2 auto-rows-min max-w-md">
+            <motion.form
+                initial="hidden"
+                animate="visible"
+                variants={formVariants}
+                transition={{ duration: 0.5 }}
+                onSubmit={handleSubmit}
+                style={{ position: 'relative' }}
+                className="container mx-auto bg-gray-600 p-7 rounded-lg grid gap-4 grid-cols-2 auto-rows-min max-w-md"
+            >
                 <label className="col-span-2 brand-font-bold text-sm text-white">
                     Job Title:
-                    <input
+                    <motion.input
+                        whileFocus={{ scale: 1.05 }}
                         type='text'
                         placeholder='Job Title'
                         value={jobTitle}
@@ -35,9 +50,11 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose }, 
                         className="job-title mt-2 block w-full px-4 py-2 bg-brandGreen rounded-lg"
                     />
                 </label>
+
                 <label className="brand-font-bold text-sm text-white">
                     Job Level:
-                    <select
+                    <motion.select
+                        whileFocus={{ scale: 1.05 }} // Add animation to this select field
                         value={jobLevel}
                         onChange={event => setJobLevel(event.target.value)}
                         className="mt-2 block w-full px-4 py-2 rounded-lg bg-brandGreen"
@@ -47,11 +64,13 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose }, 
                         <option value='Mid-Level'>Mid-Level</option>
                         <option value='Senior'>Senior</option>
                         <option value='Manager'>Manager</option>
-                    </select>
+                    </motion.select>
                 </label>
+
                 <label className="brand-font-bold text-sm text-white">
                     Job Function:
-                    <select
+                    <motion.select
+                        whileFocus={{ scale: 1.05 }} // Add animation to this select field
                         value={jobFunction}
                         onChange={event => setJobFunction(event.target.value)}
                         className="mt-2 block w-full px-4 py-2 rounded-lg bg-brandGreen"
@@ -64,11 +83,13 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose }, 
                         <option value='Data Analysis'>Data Analysis</option>
                         <option value='Graphic Design'>Graphic Design</option>
                         <option value='Digital Marketing'>Digital Marketing</option>
-                    </select>
+                    </motion.select>
                 </label>
+
                 <label className="col-span-2 brand-font-bold text-sm text-white">
                     Tools/Technologies:
-                    <input
+                    <motion.input
+                        whileFocus={{ scale: 1.05 }} // Add animation to this input
                         type='text'
                         placeholder='Keywords Only'
                         value={jobTechnology}
@@ -76,13 +97,30 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose }, 
                         className="tools-input mt-2 block w-full px-4 py-2 bg-brandGreen rounded-lg"
                     />
                 </label>
-                <button type='submit' className="rounded-full bg-gradient mt-4 px-6 py-3 col-span-2 self-center brand-font-bold text-lg text-white">
+                
+                <motion.button 
+                    whileHover={{ scale: 1.1 }} 
+                    whileTap={{ scale: 0.9 }} 
+                    type='submit' 
+                    className="rounded-full bg-gradient mt-4 px-6 py-3 col-span-2 self-center brand-font-bold text-lg text-white"
+                >
                     Start Interview
-                </button>
-                <button type='button' style={{ position: 'absolute', top: '-38px', left: '0px' }} onClick={onClose}> 
+                </motion.button>
+
+                <motion.button 
+                    whileHover={{ 
+                        scale: 1.1, 
+                        rotate: 360
+                    }} 
+                    whileTap={{ scale: 0.9 }} 
+                    type='button' 
+                    style={{ position: 'absolute', top: '-38px', left: '0px' }} 
+                    onClick={onClose}
+                >
                     <FiX size={35} color='#8C52FF' />
-                </button>
-            </form>
+                </motion.button>
+
+            </motion.form>
         </div>
     );
 })

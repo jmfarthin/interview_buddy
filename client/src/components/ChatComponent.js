@@ -3,7 +3,7 @@ import { FiSend, FiMic } from 'react-icons/fi';
 
 
 
-const ChatComponent = () => {
+const ChatComponent = ({ state }) => {
     const [newMessage, setNewMessage] = useState('');
     const [isListening, setIsListening] = useState(false);
     const recognition =null;
@@ -61,7 +61,7 @@ const ChatComponent = () => {
 
     return (
         <form 
-        className='chat-component absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full bg-brandGreen p-5 shadow-lg flex justify-center items-center' 
+        className={`chat-component chat-component-${state} absolute bottom-0 left-0 right-0 mx-auto w-full bg-brandGreen p-5 shadow-lg flex justify-center items-center`} 
         onSubmit={handleSendMessage}
     >
         <div className="relative w-full md:w-4/6">
