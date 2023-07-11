@@ -2,8 +2,10 @@ const User = require('../models/User');
 const Chat = require('../models/Chat')
 const { signToken } = require('../util/auth')
 const callOpenAI = require('../util/openai')
+const { elevenLabsAPI } = require('../util/elevenLabs');
 require("dotenv").config()
 const { ApolloError, AuthenticationError } = require('apollo-server-express');
+const { text } = require('express');
 
 const resolvers = {
     Query: {
@@ -130,7 +132,19 @@ const resolvers = {
                 return { gptMessage };
             };
             throw new AuthenticationError('You need to be logged in!');
+        },
+        generateAudio: async (parent, {textInput}) => {
+            
+            try {
+                console.log(textInput);
+                elevenLabsAPI(textInput);
+                return "SUCCESS";
+            } catch (err) {
+                return "FAILED";
+            }
+            
         }
+
     }
 
 };

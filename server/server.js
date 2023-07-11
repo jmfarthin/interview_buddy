@@ -5,7 +5,6 @@ const { authMiddleware } = require('./util/auth');
 
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
-const { elevenLabsAPI } = require('../client/src/utils/elevenLabs');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -22,14 +21,6 @@ app.use(express.json());
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../client/build')));
 }
-
-app.post('/elevenLabs', (req, res) => {
-    console.log(req);
-    console.log("check1");
-
-    elevenLabsAPI(req.body);
-    res.send(200);
-})
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build/index.html'));
