@@ -46,3 +46,9 @@ mutation addUser($firstname: String!, $email: String!, $password: String!) {
   }
 }
 `
+
+export const GENERATE_AUDIO = gql`
+mutation generateAudio($textInput: String!) {
+  generateAudio(textInput: $textInput) 
+}
+`
