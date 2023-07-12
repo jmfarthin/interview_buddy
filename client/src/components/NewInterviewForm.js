@@ -2,7 +2,7 @@ import React, { useState, forwardRef } from 'react';
 import { FiX } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import { useMutation } from '@apollo/client';
-import { CREATE_CHAT } from '../utils/mutations';
+import { CREATE_CHAT, CREATE_MESSAGE } from '../utils/mutations';
 
 const formVariants = {
     hidden: { opacity: 0, scale: 0.9 },
@@ -14,12 +14,14 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose }, 
     const [jobLevel, setJobLevel] = useState('');
     const [jobFunction, setJobFunction] = useState('');
     const [jobTechnology, setJobTechnology] = useState('');
-    const [error, setError] = useState(''); // Added error state
+    const [error, setError] = useState('');
 
     const [createChat, { loading: creatingChat }] = useMutation(CREATE_CHAT);
 
     const handleSubmit = async event => {
         event.preventDefault();
+
+        console.log("Form submitted");
 
         if (!jobTitle || !jobLevel || !jobFunction || !jobTechnology) {
             alert('All fields are required.');
@@ -29,20 +31,22 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose }, 
             try {
                 const { data } = await createChat({
                     variables: {
-                        input: {
-                            jobTitle,
-                            jobLevel,
-                            jobFunction,
-                            jobTechnology
-                        }
+                        jobTitle,
+                        jobLevel,
+                        jobFunction,
+                        jobTechnology
                     }
                 });
+
+                console.log("New chat data:", data);
 
                 console.log(data.createChat);
                 setError(''); // Clear error state upon successful chat creation
             } catch (err) {
                 console.error('Error creating chat:', err);
+                console.log("Error details:", err);
                 setError('Error creating chat.'); // Update error state if an error occurred
+
             }
         }
     };

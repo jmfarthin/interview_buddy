@@ -9,12 +9,20 @@ mutation promptChat($chatId: String!, $answer: String!) {
 `
 
 export const CREATE_CHAT = gql`
-mutation createChat($jobTitle: String!, $jobLevel: String!, $jobFunction: String!, $technologies: String) {
-  createChat(jobTitle: $jobTitle, jobLevel: $jobLevel, jobFunction: $jobFunction, technologies: $technologies) {
+mutation createChat($jobTitle: String!, $jobLevel: String!, $jobFunction: String!, $jobTechnology: String) {
+  createChat(jobTitle: $jobTitle, jobLevel: $jobLevel, jobFunction: $jobFunction, jobTechnology: $jobTechnology) {
     _id
     jobTitle
   }
 }
+`
+
+export const CREATE_MESSAGE = gql`
+  mutation PromptChat($chatId: String!, $answer: String!) {
+    promptChat(chatId: $chatId, answer: $answer) {
+      gptMessage
+    }
+  }
 `
 
 export const LOGIN = gql`

@@ -4,6 +4,9 @@ const { signToken } = require('../util/auth')
 const callOpenAI = require('../util/openai')
 require("dotenv").config()
 const { ApolloError, AuthenticationError } = require('apollo-server-express');
+const { PubSub } = require('graphql-subscriptions');
+
+const pubsub = new PubSub();
 
 const resolvers = {
     Query: {
@@ -42,32 +45,51 @@ const resolvers = {
             return { token, user };
         },
         createChat: async (parent, { jobTitle, jobLevel, jobFunction, technologies }, context) => {
-            console.log(context.user);
+            console.log(context);
             if (context.user) {
                 console.log("CREATING CHAT")
                 console.log(context.user)
-                // create first prompt messages
-                // create new chat
-                const newChat = await Chat.create({
-                    jobTitle, messages: [
-                        {
-                            role: "system",
-                            content: `You are Rachel, an interviewer. The candidate you are interviewing is ${context.user.firstname} and they are interviewing for the ${jobLevel} ${jobTitle} role, which pertains to the ${jobFunction} field. Include questions about these technologies, if applicable: ${technologies}. Please keep questions and responses brief and ask one question at a time--do not list questions and wait for a response before asking the next question. Start the interview by introducing yourself after the candidate prompts with 'Begin interview'.`
-                        },
-                        {
-                            role: "user",
-                            content: `Begin interview.`
-                        }]
-                });
-                //this needs to be in a try catch then, we don't want to update the user if the chat isn't created.
-
-                // add new chat to user
-                await User.findOneAndUpdate({ _id: context.user._id }, { $addToSet: { chats: newChat._id } },
-                    { new: true, runValidators: true })
-
-                //return newly created chat
-                return newChat;
-            };
+        
+                // create initial prompt messages
+                const initialMessages = [
+                    {
+                        role: "system",
+                        content: `You are Rachel, an interviewer. The candidate you are interviewing is ${context.user.firstname} and they are interviewing for the ${jobLevel} ${jobTitle} role, which pertains to the ${jobFunction} field. Include questions about these technologies, if applicable: ${technologies}. Please keep questions and responses brief and ask one question at a time--do not list questions and wait for a response before asking the next question. Start the interview by introducing yourself after the candidate prompts with 'Begin interview'.`
+                    },
+                    {
+                        role: "user",
+                        content: `Begin interview.`
+                    }
+                ];
+                
+                // create new chat with the initial messages
+                const newChat = await Chat.create({ jobTitle, messages: initialMessages });
+        
+                try {
+                    // Call OpenAI API with the initial messages
+                    const aiResponse = await callOpenAI(initialMessages);
+        
+                    // Append the AI's response to the chat
+                    const aiMessage = {
+                        role: "AI",
+                        content: aiResponse.choices[0].message.content // take the first choice's content as the AI's message
+                    };
+                    newChat.messages.push(aiMessage);
+        
+                    // Save the chat with the new message
+                    await newChat.save();
+        
+                    // Add new chat to user
+                    await User.findOneAndUpdate({ _id: context.user._id }, { $addToSet: { chats: newChat._id } },
+                        { new: true, runValidators: true })
+        
+                    // Return newly created chat
+                    return newChat;
+                } catch (err) {
+                    console.error(err);
+                    throw new Error('Failed to get AI response');
+                }
+            }
             throw new AuthenticationError('You need to be logged in!');
         },
         promptChat: async (parent, { chatId, answer }, context) => {
@@ -85,7 +107,7 @@ const resolvers = {
                 } else {
                     getChat = await Chat.findOne({ _id: chatId }).populate('messages').lean();
                 }
-
+        
                 //get all messages
                 const allMessages = getChat.messages;
                 console.log('----------------allmessages--------------');
@@ -94,7 +116,7 @@ const resolvers = {
                 console.log('------------------allMessagesWithoutId--------------');
                 console.log(allMessagesWithoutId);
                 console.log('----------------------------------')
-
+        
                 //establish most recent conversation
                 let currentMessages;
                 if (allMessagesWithoutId?.length >= 7) {
@@ -102,10 +124,16 @@ const resolvers = {
                 } else {
                     currentMessages = allMessagesWithoutId;
                 };
-
+        
                 // make call to openAI with current messages
-                const response = await callOpenAI(currentMessages)
-                console.log("response successful")
+                let response;
+                try {
+                    response = await callOpenAI(currentMessages)
+                    console.log("response successful")
+                } catch (error) {
+                    console.log("OpenAI call failed: ", error.message);
+                    throw new ApolloError("Failed to call OpenAI API");
+                }
                 // console.log(response)
                 console.log(`===========================================`)
                 console.log(`===========================================`)
@@ -115,6 +143,7 @@ const resolvers = {
                     console.log("My api failed!")
                     throw new ApolloError("OpenAI call Failed")
                 }
+        
                 //save gpt response to chat history
                 await Chat.findOneAndUpdate({ _id: chatId }, {
                     $addToSet: { messages: data },
@@ -123,16 +152,22 @@ const resolvers = {
                         new: true,
                         runValidators: true,
                     });
-
-
+        
+                // Publish the new message
+                pubsub.publish(`MESSAGE_ADDED_${chatId}`, { messageAdded: data });
+        
                 const gptMessage = data.content.replace(/\n/g, "");
                 console.log(gptMessage);
                 return { gptMessage };
             };
             throw new AuthenticationError('You need to be logged in!');
-        }
-    }
-
+        },
+    },
+    Subscription: {
+        messageAdded: {
+            subscribe: (parent, { chatId }) => pubsub.asyncIterator([`MESSAGE_ADDED_${chatId}`])
+        },
+    },
 };
 
 module.exports = resolvers;

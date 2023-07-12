@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import axios from 'axios'; // Import axios
+import { ApolloProvider } from '@apollo/client';
+import client from './apolloClient';
 import { Transition } from 'react-transition-group';
 import HeaderComponent from './components/HeaderComponent';
 import NewInterviewForm from './components/NewInterviewForm';
@@ -14,6 +17,13 @@ const App = () => {
   const [inProp, setInProp] = useState(false);
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    } else {
+      delete axios.defaults.headers.common['Authorization'];
+    }
+
     if (isLoggedIn) {
       setInProp(true);
     }
@@ -24,27 +34,29 @@ const App = () => {
   };
 
   return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={isLoggedIn ? <Navigate to="/app" /> : <LoginSignupForm onLogin={() => setIsLoggedIn(true)} />} />
-          <Route path="/app" element={isLoggedIn ? (
-            <>
-              <div className="flex flex-col items-center justify-center">
-                <HeaderComponent isMenuOpen={isMenuOpen} inProp={inProp} />
-                <NewInterviewForm />
-                <Transition in={inProp} timeout={300}>
-                  {(state) => <ChatComponent state={state} />}
-                </Transition>
-              </div>
-              <ChatHistory onMenuToggle={handleMenuToggle} />
-            </>
-          ) : (
-            <Navigate to="/" />
-          )} />
-        </Routes>
-      </div>
-    </Router>
+    <ApolloProvider client={client}>
+      <Router>
+        <div className="App">
+          <Routes>
+            <Route path="/" element={isLoggedIn ? <Navigate to="/app" /> : <LoginSignupForm onLogin={() => setIsLoggedIn(true)} />} />
+            <Route path="/app" element={isLoggedIn ? (
+              <>
+                <div className="flex flex-col items-center justify-center">
+                  <HeaderComponent isMenuOpen={isMenuOpen} inProp={inProp} />
+                  <NewInterviewForm />
+                  <Transition in={inProp} timeout={300}>
+                    {(state) => <ChatComponent state={state} />}
+                  </Transition>
+                </div>
+                <ChatHistory onMenuToggle={handleMenuToggle} />
+              </>
+            ) : (
+              <Navigate to="/" />
+            )} />
+          </Routes>
+        </div>
+      </Router>
+    </ApolloProvider>
   );
 }
 
