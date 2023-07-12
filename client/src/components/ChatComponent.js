@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FiSend, FiMic } from 'react-icons/fi';
 import { useReactMediaRecorder } from "react-media-recorder";
 
+
 const ChatComponent = ({ state }) => {
   const [newMessage, setNewMessage] = useState('');
   const [isListening, setIsListening] = useState(false);
@@ -47,6 +48,7 @@ const ChatComponent = ({ state }) => {
         `,
       }),
     };
+
 
     if (mediaBlobUrl) {
       const audioBlob = await fetch(mediaBlobUrl).then(res => res.blob());
