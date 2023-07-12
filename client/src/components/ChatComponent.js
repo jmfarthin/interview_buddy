@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FiSend } from 'react-icons/fi';
+import AudioPlayer from './AudioPlayer';
 
 const ChatComponent = ({ state }) => {
     const [newMessage, setNewMessage] = useState('');
@@ -60,7 +61,9 @@ const ChatComponent = ({ state }) => {
                     <FiSend size={23} color='#8C52FF' />
                 </button>
             </div>
+            <AudioPlayer></AudioPlayer>
         </form>
+        
     );
 }
 
