@@ -9,18 +9,6 @@ const httpLink = new HttpLink({
   uri: 'http://localhost:3001/graphql',
 });
 
-const token = authService.getToken();
-console.log(token);
-const wsLink = new WebSocketLink({
-  uri: 'ws://localhost:3001/graphql',
-  options: {
-    reconnect: true,
-    connectionParams: {
-      authorization: authService.getToken() ? `Bearer ${authService.getToken()}` : "",
-    },
-  }
-});
-
 const authLink = setContext((_, { headers }) => {
   const token = authService.getToken();
   return {
@@ -28,6 +16,16 @@ const authLink = setContext((_, { headers }) => {
       ...headers,
       authorization: token ? `Bearer ${token}` : "",
     }
+  }
+});
+
+const wsLink = new WebSocketLink({
+  uri: 'ws://localhost:3001/graphql',
+  options: {
+    reconnect: true,
+    connectionParams: {
+      authorization: authService.getToken() ? `Bearer ${authService.getToken()}` : "",
+    },
   }
 });
 

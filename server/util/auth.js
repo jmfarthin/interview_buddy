@@ -1,3 +1,5 @@
+const User = require('../models/User');
+
 const jwt = require('jsonwebtoken');
 
 const secret = 'mysecretssshhhhhhh';
@@ -12,22 +14,19 @@ module.exports = {
     }
   
     if (!token) {
+      console.log('No token found');
       return req;
     }
   
     try {
-      const { data } = jwt.verify(token, secret, { maxAge: expiration });
-      req.user = data;
-    } catch {
-      console.log('Invalid token');
-    }
+      const decodedToken = jwt.decode(token);
+      console.log('Decoded token:', decodedToken);
   
-    if (req.user) {
-      return Promise.resolve(User.findUser(req.user))
-        .then((user) => {
-          req.user = user;
-          return req;
-        });
+      const user = jwt.verify(token, secret, { maxAge: expiration });
+      req.user = user;
+      console.log('Token data:', user);
+    } catch (error) {
+      console.log('Error verifying token:', error.message);
     }
   
     return req;

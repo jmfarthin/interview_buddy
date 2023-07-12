@@ -68,11 +68,12 @@ const resolvers = {
                 try {
                     // Call OpenAI API with the initial messages
                     const aiResponse = await callOpenAI(initialMessages);
+                    console.log(aiResponse);
         
                     // Append the AI's response to the chat
                     const aiMessage = {
                         role: "AI",
-                        content: aiResponse.choices[0].message.content // take the first choice's content as the AI's message
+                        content: aiResponse.data.choices[0].message.content // take the first choice's content as the AI's message
                     };
                     newChat.messages.push(aiMessage);
         

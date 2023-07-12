@@ -25,7 +25,7 @@ const LoginSignupForm = ({ onLogin }) => {
           password: loginPassword,
         });
   
-        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('id_token', response.data.token);
         onLogin();
         navigate('/app'); // Redirect to the main app page
   
@@ -43,7 +43,7 @@ const LoginSignupForm = ({ onLogin }) => {
           password: registerPassword,
         });
   
-        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('id_token', response.data.token);
         onLogin();
         navigate('/app'); // Redirect to the main app page
   
