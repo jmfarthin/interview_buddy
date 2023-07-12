@@ -1,4 +1,112 @@
-# Getting Started with Create React App
+# InterviewBuddy
+![Logo](logo_url)
+![GitHub issues](https://img.shields.io/github/issues-raw/jmfarthin/InterviewBuddy)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/jmfarthin/InterviewBuddy)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/jmfarthin/InterviewBuddy)
+
+InterviewBuddy is an innovative, AI-driven application that uses the MERN stack (MongoDB, Express, React, and Node.js), OpenAI's ChatGPT API, Whisper ASR API, and Eleven Labs Text-to-Speech API to simulate realistic technical interviews. Users can specify the type and level of the technical role they're preparing for, as well as the relevant technologies necessary for the position. InterviewBuddy then assumes the role of the interviewer and asks a series of relevant questions. Past interviews can be stored and reviewed at a later stage, making interview practice more efficient and user-focused.
+
+## Why Does InterviewBuddy Exist?
+
+The tech industry has never been more competitive. Job seekers for the most desirable roles must not only possess a firm grasp of the relevant technologies, but must be able to competently demonstrate that knowledge with an interviewer. These interactions can prove to be a stressful environment, with applicants often unable to properly communicate their abilities. InterviewBuddy leverages the power of Artificial Intelligence to familiarize applicants with the questions they will be expected to answer to acquire these jobs. With regular practice, users can expect to become better at communicating their current skill set, while gaining insight of their potential weaknesses. 
+
+## Table of Contents
+
+1. [Features](#features)
+2. [Getting Started](#getting-started)
+3. [Prerequisites](#prerequisites)
+4. [Installation](#installation)
+5. [Usage](#usage)
+6. [Deployment](#deployment)
+7. [Built With](#built-with)
+8. [Authors](#authors)
+9. [License](#license)
+10. [Acknowledgments](#acknowledgments)
+
+## Features
+
+- AI-driven technical interviews
+- User-configurable interview parameters
+- Reviewable past interviews
+- High-quality text-to-speech and speech-to-text capabilities
+- Modern, responsive interface styled with Tailwind CSS
+
+## Getting Started
+
+To get a local copy up and running, follow these steps.
+
+## Prerequisites
+
+- Node.js and npm installed on your machine. If not, download and install [Node.js](https://nodejs.org/en/download/) which comes with npm.
+
+## Installation
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/jmfarthin/InterviewBuddy.git
+   ```
+2. Install NPM packages
+   ```sh
+   npm install
+   ```
+
+## Usage
+
+1. Set the type and level of the technical role for your mock interview.
+2. Specify the relevant technologies required for the position.
+3. Start the interview and answer the AI interviewer's questions.
+4. Past interviews can be accessed and reviewed for progress tracking and future preparations.
+
+## Deployment
+
+The application is stored and can be accessed at https://github.com/jmfarthin/project-3.
+
+## Built With
+
+- [MERN Stack](https://www.mongodb.com/mern-stack) - (MongoDB, Express, React, Node.js)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [OpenAI's ChatGPT API](https://openai.com/research/chatgpt)
+- [Whisper ASR API](https://openai.com/research/whisper)
+- [Eleven Labs Text-to-Speech API](https://elevenlabs.ai/)
+
+## Authors
+
+Derek Sutton
+
+https://github.com/dereksutton
+
+Justin Farthing
+
+https://github.com/jmfarthin
+
+Kevin Silveira Rodriguez
+
+https://github.com/krsilveira
+
+
+Nnamdi Onyeije
+
+https://github.com/nnamdionyeije
+
+
+Reggie Mosley
+
+https://github.com/RMosley912
+
+
+
+
+## Acknowledgments
+
+- Thanks to [OpenAI](https://openai.com/) for the powerful AI APIs
+- [Eleven Labs](https://elevenlabs.ai/) for their text-to-speech API
+- Saurav Khatiwada for his cheerful and knowledgeable guidance the past 6 months
+- Andres Jimenez for his expertize and helpful suggestions
+
+
+
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -39,32 +147,9 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
+### Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

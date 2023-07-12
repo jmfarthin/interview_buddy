@@ -7,6 +7,10 @@ const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
 const { elevenLabsAPI } = require('../client/src/utils/elevenLabs');
 
+const multer = require('multer');
+const axios = require('axios');
+const upload = multer({ dest: 'uploads/' });
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 const server = new ApolloServer({
@@ -33,8 +37,31 @@ app.post('/elevenLabs', (req, res) => {
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build/index.html'));
+    
 });
 
+app.post('/api/voice', upload.single('audio'), async (req, res) => {
+    try {
+      const audioFilePath = req.file.path;
+  
+      // Call Whisper API to convert audio to text
+      const response = await axios.post(
+        'https://api.openai.com/v1/engines/whisper/mimic-asr',
+        { audio: { file: audioFilePath } },
+        { headers: { 'Authorization': `Bearer ${OPENAI_API_KEY}` } }
+      );
+  
+      const text = response.data.choices[0].text;
+      
+      // Now you can call your GraphQL mutation to save the text message
+      // ...  
+  
+      res.json({ message: 'Voice processed', text: text });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Error processing voice' });
+    }
+  });
 
 
 // new instance of an Apollo server with the GraphQL schema
@@ -53,3 +80,5 @@ const startApolloServer = async (typeDefs, resolvers) => {
 
 // start the server
 startApolloServer(typeDefs, resolvers);
+
+
