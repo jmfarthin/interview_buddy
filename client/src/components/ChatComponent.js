@@ -5,104 +5,129 @@ import { useMutation, useSubscription } from '@apollo/client';
 import { MESSAGE_ADDED } from '../utils/subscriptions';
 import { PROMPT_CHAT } from '../utils/mutations';
 
-const ChatComponent = ({ state, chatId }) => {
-  console.log(`ChatComponent state: ${state}`);
-  console.log(`ChatComponent chatId: ${chatId}`);
+const ChatComponent = ({ chatId, initialMessage }) => {
+  console.log(currentChatId);
 
   const [newMessage, setNewMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const [typing, setTyping] = useState(false);
+  const [typingMessage, setTypingMessage] = useState({ role: '', content: '', index: 0 });
   const messagesEndRef = useRef(null);
 
-  // Log when chatId changes
-  useEffect(() => {
-    console.log(`ChatId changed to: ${chatId}`);
-  }, [chatId]);
-
-  // Check mounting
-  useEffect(() => {
-    console.log('ChatComponent mounted');
-    
-    return () => {
-      console.log('ChatComponent unmounted');
-    };
-  }, []);
-
-  // Check when the props change
-  useEffect(() => {
-    console.log('ChatComponent state:', state);
-    console.log('ChatComponent chatId:', chatId);
-  }, [state, chatId]);
-
-  // Subscribe to new messages
   const { data, error: subscriptionError } = useSubscription(MESSAGE_ADDED, { variables: { chatId } });
   const [promptChat, { loading: chatLoading, error: chatError }] = useMutation(PROMPT_CHAT);
 
-  // Auto scroll to bottom 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }
+  const startTyping = (message) => {
+    setTyping(true);
+    setTypingMessage({ role: message.role, content: '', index: 0 });
 
-  // Update local state when new message arrives
+    const typingInterval = setInterval(() => {
+      setTypingMessage((typingMessage) => {
+        if (typingMessage.index < message.content.length) {
+          return {
+            role: typingMessage.role,
+            content: typingMessage.content + message.content[typingMessage.index],
+            index: typingMessage.index + 1,
+          };
+        } else {
+          clearInterval(typingInterval);
+          setMessages((prevMessages) => [...prevMessages, { role: message.role, content: message.content }]);
+          setTyping(false);
+          if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+          }
+          return { role: '', content: '', index: 0 };
+        }
+      });
+    }, 50);
+  };
+
   useEffect(() => {
-    if (data && data.messageAdded) {
-      setMessages(prevMessages => [...prevMessages, data.messageAdded]);
-      scrollToBottom();
+    if (data && data.messageAdded && (!messages.length || messages[messages.length - 1].content !== data.messageAdded.content)) {
+      startTyping(data.messageAdded);
     }
-  }, [data]);
+  }, [data, messages]);
+
+  useEffect(() => {
+    if (initialMessage) {
+      startTyping(initialMessage);
+    }
+  }, [initialMessage]);
 
   const handleNewMessageChange = event => {
     setNewMessage(event.target.value);
   };
 
   const handleSendMessage = async event => {
+    console.log('Chat ID in handleSendMessage:', chatId);
     event.preventDefault();
-
-    // Clear the input field before sending the message
+    const userMessage = newMessage;
     setNewMessage('');
-
     try {
-      const { data } = await promptChat({ variables: { chatId, answer: newMessage } });
-      
-      // Append the new message from the AI to the messages array
+      setMessages((prevMessages) => [...prevMessages, { role: 'User', content: userMessage }]);
+      const { data } = await promptChat({ variables: { chatId, answer: userMessage } });
       if (data && data.promptChat) {
-        setMessages(prevMessages => [...prevMessages, { role: 'AI', content: data.promptChat.gptMessage }]);
+        startTyping({ role: 'Rachel', content: data.promptChat.gptMessage });
+      } else {
+        throw new Error("Failed to get AI response");
       }
     } catch (err) {
       console.error(err);
-      // handle error here
     }
   };
 
   return (
-    <div className="chat-component">
-      {/* Display messages */}
-      <div>
-        {subscriptionError && <p>Error: {subscriptionError.message}</p>}
-        {messages.map((message, index) => (
-          <p key={index}>{message.role}: {message.content}</p>
-        ))}
-        <div ref={messagesEndRef} />
-      </div>
-      
-      <form 
-        className={`chat-component-${state} absolute bottom-0 left-0 right-0 mx-auto w-full bg-brandGreen p-5 shadow-lg flex justify-center items-center`} 
-        onSubmit={handleSendMessage}
-      >
-        <div className="relative w-full md:w-4/6">
-          <input
-            className='chat-input flex-grow bg-brandGray p-3 rounded-full w-full'
-            type='text'
-            placeholder='Send Reply'
-            value={newMessage}
-            onChange={handleNewMessageChange}
-          />
-          <button type='submit' className='absolute right-4 top-1/2 transform -translate-y-1/2 p-3 bg-brandGray text-white rounded-md' disabled={chatLoading}>
-            {chatLoading ? <PacmanLoader /> : <FiSend size={23} color='#8C52FF' />}
-          </button>
+    <>
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', justifyContent: 'flex-end', alignItems: 'center' }}>
+        <div 
+          className="chat-wrapper"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',  // changed from 'column-reverse'
+            overflowY: 'auto',
+            maxHeight: 'calc(100vh - 120px)', // adjust based on the actual height of your HeaderComponent and form
+            width: '100%',
+            maxWidth: '60%',
+            padding: '4rem',
+            boxSizing: 'border-box',
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+            position: 'absolute', // make it absolute
+            bottom: '60px', // adjust based on the actual height of your form
+          }}
+        >
+          <div ref={messagesEndRef} />
+          {(typing && typingMessage.role) ? <p className="pb-2"><span className="bg-brandGreen p-1 rounded-md">{typingMessage.role}</span>  {typingMessage.content}<span className='typing-indicator'>|</span></p> : null}
+          {messages.map((message, index) => (
+            <p key={index} className="pb-2"><span className="bg-brandGreen p-1 rounded-md">{message.role}</span> {message.content}</p>
+          ))}
         </div>
-      </form>
-      {chatError && <p>Error: {chatError.message}</p>}
-    </div>
+        <form
+          onSubmit={handleSendMessage}
+          style={{
+            position: 'fixed',
+            bottom: 0,
+            width: '100%',
+            background: '#34BB9A',
+            padding: '1rem',
+            boxSizing: 'border-box',
+          }}
+        >
+          <div className="relative w-full md:w-4/6 mx-auto">
+            <input
+              className='chat-input flex-grow bg-brandGray p-3 rounded-full w-full'
+              type='text'
+              placeholder='Send Reply'
+              value={newMessage}
+              onChange={handleNewMessageChange}
+            />
+            <button type='submit' className='absolute right-4 top-1/2 transform -translate-y-1/2 p-3 bg-brandGray text-white rounded-md' disabled={chatLoading}>
+              {chatLoading ? <PacmanLoader /> : <FiSend size={23} color='#8C52FF' />}
+            </button>
+          </div>
+        </form>
+      </div>
+    </>
   );
 }
 

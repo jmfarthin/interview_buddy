@@ -72,7 +72,7 @@ const resolvers = {
         
                     // Append the AI's response to the chat
                     const aiMessage = {
-                        role: "AI",
+                        role: "Rachel",
                         content: aiResponse.data.choices[0].message.content // take the first choice's content as the AI's message
                     };
                     newChat.messages.push(aiMessage);

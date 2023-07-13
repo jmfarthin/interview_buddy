@@ -28,15 +28,27 @@ const NewInterviewForm = ({ onClose, onChatCreated }) => {
 
     const [createChat, { loading: chatLoading }] = useMutation(CREATE_CHAT, {
         onCompleted: (data) => {
-        try {
-            refetch();
-            if (typeof onChatCreated === 'function') {
-            onChatCreated(data.createChat._id);
+            try {
+                refetch();
+        
+                // Parse the AI message from the messages array in the newly created chat.
+                if (data && data.createChat) {
+                    const aiMessage = data.createChat.messages.find(message => message.role === 'Rachel');
+                    const chatId = data.createChat.chatId;
+                    console.log('AI message:', aiMessage);
+                    console.log('Chat ID:', chatId);
+        
+                    if (typeof onChatCreated === 'function') {
+                        // Pass the AI message and chatId to onChatCreated.
+                        onChatCreated({ ...aiMessage, chatId });
+                    }
+                } else {
+                    console.error('No chat data:', data);
+                }
+            } catch (err) {
+                console.error('Error:', err);
             }
-        } catch (err) {
-            console.error('Error updating cache:', err);
         }
-        },
     });
 
     const handleSubmit = async event => {

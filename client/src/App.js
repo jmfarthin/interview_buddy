@@ -17,6 +17,7 @@ const App = () => {
   const [inProp, setInProp] = useState(false);
   const [currentChatId, setCurrentChatId] = useState(null);
   const [showForm, setShowForm] = useState(false); // State to control the visibility of the form
+  const [initialMessage, setInitialMessage] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -36,9 +37,12 @@ const App = () => {
   };
 
   // Function to handle chat creation
-  const handleChatCreated = useCallback((chatId) => {
-    console.log('handleChatCreated called with:', chatId);
-    setCurrentChatId(chatId);
+  const handleChatCreated = useCallback((aiMessage) => {
+    console.log(aiMessage);
+    setCurrentChatId(aiMessage.chatId);
+    console.log('Chat ID Expected ==================');
+    console.log(currentChatId);
+    setInitialMessage(aiMessage);
     setInProp(true);
     setShowForm(false);  // Hide the form after chat creation
   }, []);
@@ -57,10 +61,14 @@ const App = () => {
             <Route path="/app" element={isLoggedIn ? (
               <>
                 <div className="flex flex-col items-center justify-center">
-                  <HeaderComponent isMenuOpen={isMenuOpen} inProp={inProp} onNewInterview={handleShowForm} />  // Pass handleShowForm to HeaderComponent
-                  {showForm && <NewInterviewForm onChatCreated={handleChatCreated} />}  // Only render NewInterviewForm if showForm is true
-                  <Transition in={inProp} timeout={300}>
-                    {(state) => <ChatComponent chatId={currentChatId} state={state} />}
+                  <HeaderComponent isMenuOpen={isMenuOpen} inProp={inProp} onNewInterview={handleShowForm} />
+                  {showForm && <NewInterviewForm onClose={() => setShowForm(false)} onChatCreated={handleChatCreated} />}
+                  <Transition in={inProp} timeout={500}>
+                    {(state) => (
+                      <div className={`popup ${state}`}>
+                        <ChatComponent chatId={currentChatId} initialMessage={initialMessage} />
+                      </div>
+                    )}
                   </Transition>
                 </div>
                 <ChatHistory onMenuToggle={handleMenuToggle} />
