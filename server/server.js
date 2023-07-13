@@ -2,7 +2,7 @@ const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const path = require('path');
 const { authMiddleware } = require('./util/auth');
-
+const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
 
@@ -52,6 +52,30 @@ app.post('/api/voice', upload.single('audio'), async (req, res) => {
       console.error(err);
       res.status(500).json({ error: 'Error processing voice' });
     }
+  });
+
+  app.post('/create-checkout-session', async (req, res) => {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: 'Donate 10 Dollars to the Dev Team ',
+              // add any other product details here
+            },
+            unit_amount: 1000, // the price you want to charge, e.g., $20.00
+          },
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      success_url: 'http://localhost:3000/success',
+      cancel_url: 'http://localhost:3000/cancel',
+    });
+  
+    res.json({ id: session.id });
   });
 
 

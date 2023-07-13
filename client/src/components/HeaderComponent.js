@@ -4,6 +4,7 @@ import { FaPlus } from 'react-icons/fa';
 import logo from '../InterviewBuddy-Logo2.png';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import CheckoutComponent from './CheckoutComponent';
 
 const HeaderComponent = ({ isMenuOpen, inProp }) => {
     const [showForm, setShowForm] = useState(false);
@@ -48,6 +49,7 @@ const HeaderComponent = ({ isMenuOpen, inProp }) => {
                         </motion.button>
                     )}
                     {showForm && <NewInterviewForm showForm={showForm} onClose={handleShowForm} />}
+                    <CheckoutComponent />
                 </div>
             </header>
         </>
