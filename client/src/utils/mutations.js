@@ -17,14 +17,6 @@ mutation createChat($jobTitle: String!, $jobLevel: String!, $jobFunction: String
 }
 `
 
-export const CREATE_MESSAGE = gql`
-  mutation PromptChat($chatId: String!, $answer: String!) {
-    promptChat(chatId: $chatId, answer: $answer) {
-      gptMessage
-    }
-  }
-`
-
 export const LOGIN = gql`
 mutation login($email: String!, $password: String!) {
   login(email: $email, password: $password) {

@@ -2,14 +2,36 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FiSend } from 'react-icons/fi';
 import { PacmanLoader } from 'react-spinners';
 import { useMutation, useSubscription } from '@apollo/client';
-
 import { MESSAGE_ADDED } from '../utils/subscriptions';
 import { PROMPT_CHAT } from '../utils/mutations';
 
 const ChatComponent = ({ state, chatId }) => {
+  console.log(`ChatComponent state: ${state}`);
+  console.log(`ChatComponent chatId: ${chatId}`);
+
   const [newMessage, setNewMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
+
+  // Log when chatId changes
+  useEffect(() => {
+    console.log(`ChatId changed to: ${chatId}`);
+  }, [chatId]);
+
+  // Check mounting
+  useEffect(() => {
+    console.log('ChatComponent mounted');
+    
+    return () => {
+      console.log('ChatComponent unmounted');
+    };
+  }, []);
+
+  // Check when the props change
+  useEffect(() => {
+    console.log('ChatComponent state:', state);
+    console.log('ChatComponent chatId:', chatId);
+  }, [state, chatId]);
 
   // Subscribe to new messages
   const { data, error: subscriptionError } = useSubscription(MESSAGE_ADDED, { variables: { chatId } });

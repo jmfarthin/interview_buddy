@@ -1,22 +1,43 @@
-import React, { useState, forwardRef } from 'react';
+import React, { useState } from 'react';
 import { FiX } from 'react-icons/fi';
 import { motion } from 'framer-motion';
-import { useMutation } from '@apollo/client';
-import { CREATE_CHAT, CREATE_MESSAGE } from '../utils/mutations';
+import { useMutation, useQuery, gql } from '@apollo/client';
+import { CREATE_CHAT } from '../utils/mutations';
+import { ME } from '../utils/queries';
+import { useApolloClient } from '@apollo/client';
 
 const formVariants = {
     hidden: { opacity: 0, scale: 0.9 },
     visible: { opacity: 1, scale: 1 },
 };
 
-const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose }, ref) => {
+const NewInterviewForm = ({ onClose, onChatCreated }) => {
+    const client = useApolloClient();
+    const [showForm, setShowForm] = useState(true);
+
     const [jobTitle, setJobTitle] = useState('');
     const [jobLevel, setJobLevel] = useState('');
     const [jobFunction, setJobFunction] = useState('');
     const [jobTechnology, setJobTechnology] = useState('');
     const [error, setError] = useState('');
 
-    const [createChat, { loading: creatingChat }] = useMutation(CREATE_CHAT);
+    const { loading: loadingMe, error: errorMe, data: dataMe, refetch } = useQuery(ME);
+
+    console.log('onChatCreated:', onChatCreated);
+    console.log(typeof onChatCreated);
+
+    const [createChat, { loading: chatLoading }] = useMutation(CREATE_CHAT, {
+        onCompleted: (data) => {
+        try {
+            refetch();
+            if (typeof onChatCreated === 'function') {
+            onChatCreated(data.createChat._id);
+            }
+        } catch (err) {
+            console.error('Error updating cache:', err);
+        }
+        },
+    });
 
     const handleSubmit = async event => {
         event.preventDefault();
@@ -29,7 +50,7 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose }, 
             console.log({ jobTitle, jobLevel, jobFunction, jobTechnology });
             
             try {
-                const { data } = await createChat({
+                await createChat({
                     variables: {
                         jobTitle,
                         jobLevel,
@@ -38,13 +59,10 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose }, 
                     }
                 });
 
-                console.log("New chat data:", data);
-
-                console.log(data.createChat);
                 setError(''); // Clear error state upon successful chat creation
+                setShowForm(false);
             } catch (err) {
                 console.error('Error creating chat:', err);
-                console.log("Error details:", err);
                 setError('Error creating chat.'); // Update error state if an error occurred
 
             }
@@ -152,6 +170,6 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose }, 
             </motion.form>
         </div>
     );
-})
+};
 
 export default NewInterviewForm;

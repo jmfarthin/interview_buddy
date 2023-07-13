@@ -83,6 +83,9 @@ const resolvers = {
                     // Add new chat to user
                     await User.findOneAndUpdate({ _id: context.user._id }, { $addToSet: { chats: newChat._id } },
                         { new: true, runValidators: true })
+
+                    // Publish the new message
+                    pubsub.publish(`MESSAGE_ADDED_${newChat._id}`, { messageAdded: aiMessage });
         
                     // Return newly created chat
                     return newChat;

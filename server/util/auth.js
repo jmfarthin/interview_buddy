@@ -15,7 +15,7 @@ module.exports = {
   
     if (!token) {
       console.log('No token found');
-      return req;
+      return { user: null };
     }
   
     try {
@@ -23,13 +23,12 @@ module.exports = {
       console.log('Decoded token:', decodedToken);
   
       const user = jwt.verify(token, secret, { maxAge: expiration });
-      req.user = user;
       console.log('Token data:', user);
+      return { user };  // Note this line
     } catch (error) {
       console.log('Error verifying token:', error.message);
+      return { user: null };
     }
-  
-    return req;
   },
 
   signToken: function ({ email, firstname, _id }) {

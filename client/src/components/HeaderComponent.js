@@ -5,13 +5,8 @@ import logo from '../InterviewBuddy-Logo2.png';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-const HeaderComponent = ({ isMenuOpen, inProp }) => {
-    const [showForm, setShowForm] = useState(false);
+const HeaderComponent = ({ isMenuOpen, inProp, onNewInterview }) => {
     const navigate = useNavigate();
-
-    const handleShowForm = () => {
-        setShowForm(!showForm);
-    }
 
     const handleLogout = () => {
         localStorage.removeItem('token'); // placeholder until auth is fully configured
@@ -40,14 +35,13 @@ const HeaderComponent = ({ isMenuOpen, inProp }) => {
                             transition={{type: 'spring', stiffness: 50}}
                             whileHover={{ scale: 1.1 }} 
                             whileTap={{ scale: 0.9 }} 
-                            onClick={handleShowForm} 
+                            onClick={onNewInterview} 
                             className="flex items-center bg-gradient rounded-full p-4 shadow-2xl"
                         >
                             <FaPlus style={{ color: '#34BB9A' }} className="mr-2" />
                             <span className="brand-font-bold text-white text-lg">New Interview</span>
                         </motion.button>
                     )}
-                    {showForm && <NewInterviewForm showForm={showForm} onClose={handleShowForm} />}
                 </div>
             </header>
         </>
