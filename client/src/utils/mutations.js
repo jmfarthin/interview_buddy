@@ -22,6 +22,7 @@ mutation login($email: String!, $password: String!) {
   login(email: $email, password: $password) {
     token
     user {
+      _id
       firstname
       chats {
         _id
@@ -41,6 +42,7 @@ mutation addUser($firstname: String!, $email: String!, $password: String!) {
   addUser(firstname: $firstname, email: $email, password: $password) {
     token
     user {
+      _id
       firstname
     }
   }

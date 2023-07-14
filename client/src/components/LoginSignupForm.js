@@ -1,43 +1,89 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Lottie from 'lottie-react';
 import logo from '../InterviewBuddy-Logo2.png';
 import myAnimation from '../121995-interview-purple.json';
+import Auth from '../utils/auth';
+import { useMutation } from '@apollo/client';
+import { LOGIN, ADD_USER } from '../utils/mutations';
+
+
+//const LoginSignupForm = ({ onLogin }) => {
 
 const LoginSignupForm = ({ onLogin }) => {
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
 
+  const [registerFirstname, setRegisterFirstname] = useState('');
   const [registerEmail, setRegisterEmail] = useState('');
   const [registerPassword, setRegisterPassword] = useState('');
-  const [registerConfirmPassword, setRegisterConfirmPassword] = useState('');
 
   const [errorMessage, setErrorMessage] = useState('');
+
+  const [login] = useMutation(LOGIN);
+  const [addUser] = useMutation(ADD_USER);
 
   const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    // Simulating login process
-    if (loginEmail === 'test@test.com' && loginPassword === 'test') {
-      setErrorMessage('Logged in successfully!');
-      onLogin();
-      navigate('/app'); // Redirect to the main app page
-    } else {
-      setErrorMessage('Login failed');
-    }
+
+    try {
+        const response = await login({
+            variables: {
+                email: loginEmail,
+                password: loginPassword,
+            }
+        });
+
+        
+        if (!response) {
+            throw new Error('something went wrong!');
+        }
+
+        const { token, user } = await response.data.login;
+        Auth.login(token);
+  
+        // localStorage.setItem('id_token', response.data.login.token);
+        onLogin();
+        navigate('/app'); // Redirect to the main app page
+  
+      } catch (error) {
+        setErrorMessage('Login failed');
+      }
   };
 
   const handleRegister = async (event) => {
     event.preventDefault();
-    if (registerPassword !== registerConfirmPassword) {
-      setErrorMessage('Passwords do not match. Please try again');
-      return;
-    }
-    // Simulating registration process
-    setErrorMessage(`Registered successfully with email: ${registerEmail}`);
-    onLogin();
-    navigate('/app'); // Redirect to the main app page
+    try {
+        const response = await addUser({
+            variables: {
+                firstname: registerFirstname,
+                email: registerEmail,
+                password: registerPassword, 
+            }
+        });
+
+        if (!response) {
+            throw new Error('something went wrong!');
+        }
+
+        // const { token, user } = await response.json();
+        // console.log(user);
+        // onLogin();
+        // Auth.login(response.data.token);
+        
+
+        console.log(response.data);
+
+        localStorage.setItem('id_token', response.data.addUser.token);
+        onLogin();
+        navigate('/app'); // Redirect to the main app page
+  
+      } catch (error) {
+        setErrorMessage('Registration failed');
+      }
   };
 
   return (
@@ -106,6 +152,19 @@ const LoginSignupForm = ({ onLogin }) => {
                 <h2 className="text-2xl text-white brand-font-bold mb-3">Create a new account</h2>
                 <form onSubmit={handleRegister}>
                     <div className="mb-4">
+                    <label htmlFor="registerFirstname" className="block text-sm brand-font-bold text-white">
+                        First Name
+                    </label>
+                    <input
+                        type="text"
+                        id="registerFirstname"
+                        className="firstname-input bg-brandGreen px-3 py-2 rounded-lg w-full"
+                        value={registerFirstname}
+                        onChange={(event) => setRegisterFirstname(event.target.value)}
+                        placeholder="First Name"
+                    />
+                    </div>
+                    <div className="mb-4">
                     <label htmlFor="registerEmail" className="block text-sm brand-font-bold text-white">
                         Email
                     </label>
@@ -129,22 +188,6 @@ const LoginSignupForm = ({ onLogin }) => {
                         value={registerPassword}
                         onChange={(event) => setRegisterPassword(event.target.value)}
                         placeholder="Password"
-                    />
-                    </div>
-                    <div className="mb-4">
-                    <label
-                        htmlFor="registerConfirmPassword"
-                        className="block text-sm brand-font-bold text-white"
-                    >
-                        Confirm Password
-                    </label>
-                    <input
-                        type="password"
-                        id="registerConfirmPassword"
-                        className="password-input bg-brandGreen px-3 py-2 rounded-lg w-full"
-                        value={registerConfirmPassword}
-                        onChange={(event) => setRegisterConfirmPassword(event.target.value)}
-                        placeholder="Confirm Password"
                     />
                     </div>
                     <button

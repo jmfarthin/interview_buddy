@@ -1,10 +1,12 @@
 import axios from 'axios';
+require('dotenv').config();
+
 
 // Define a function called textToSpeech that takes in a string called inputText as its argument.
 const textToSpeech = async (inputText) => {
   // Set the API key for ElevenLabs API. 
   // Do not use directly. Use environment variables.
-  const API_KEY = '8a22f6f4cd89d5b28eebeaf307521dc8';
+  const API_KEY = process.env.ELEVENLABS_API_KEY;
   // Set the ID of the voice to be used.
   const VOICE_ID = '21m00Tcm4TlvDq8ikWAM';
 
