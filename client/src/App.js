@@ -6,6 +6,7 @@ import NewInterviewForm from './components/NewInterviewForm';
 import ChatComponent from './components/ChatComponent';
 import ChatHistory from './components/ChatHistory';
 import LoginSignupForm from './components/LoginSignupForm';
+import Auth from './utils/auth';
 import './index.css';
 
 const App = () => {
@@ -14,7 +15,9 @@ const App = () => {
   const [inProp, setInProp] = useState(false);
 
   useEffect(() => {
-    if (isLoggedIn) {
+    // if (isLoggedIn) {
+
+    if (Auth.loggedIn()) {
       setInProp(true);
     }
   }, [isLoggedIn]);
@@ -27,8 +30,11 @@ const App = () => {
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={isLoggedIn ? <Navigate to="/app" /> : <LoginSignupForm onLogin={() => setIsLoggedIn(true)} />} />
-          <Route path="/app" element={isLoggedIn ? (
+        {/* <Route path="/" element={isLoggedIn ? <Navigate to="/app" /> : <LoginSignupForm onLogin={() => setIsLoggedIn(true)} />} /> */}
+
+          <Route path="/" element={Auth.loggedIn() ?  <Navigate to= "/app" /> : <LoginSignupForm/>} />
+          {/* <Route path="/app" element={isLoggedIn ? ( */}
+          <Route path="/app" element={Auth.loggedIn() ? (
             <>
               <div className="flex flex-col items-center justify-center">
                 <HeaderComponent isMenuOpen={isMenuOpen} inProp={inProp} />

@@ -11,7 +11,7 @@ import { LOGIN, ADD_USER } from '../utils/mutations';
 
 //const LoginSignupForm = ({ onLogin }) => {
 
-const LoginSignupForm = ({ onLogin }) => {
+const LoginSignupForm = () => {
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
 
@@ -46,8 +46,7 @@ const LoginSignupForm = ({ onLogin }) => {
         Auth.login(token);
   
         // localStorage.setItem('id_token', response.data.login.token);
-        onLogin();
-        navigate('/app'); // Redirect to the main app page
+        // navigate('/app'); // Redirect to the main app page
   
       } catch (error) {
         setErrorMessage('Login failed');
@@ -69,17 +68,21 @@ const LoginSignupForm = ({ onLogin }) => {
             throw new Error('something went wrong!');
         }
 
+        console.log(response);
+        const { token, user } = await response.data;
+        console.log(user);
+        Auth.login(token);
+
         // const { token, user } = await response.json();
         // console.log(user);
         // onLogin();
         // Auth.login(response.data.token);
         
 
-        console.log(response.data);
+        // console.log(response.data);
 
-        localStorage.setItem('id_token', response.data.addUser.token);
-        onLogin();
-        navigate('/app'); // Redirect to the main app page
+        // localStorage.setItem('id_token', response.data.addUser.token);
+        // navigate('/app'); // Redirect to the main app page
   
       } catch (error) {
         setErrorMessage('Registration failed');
