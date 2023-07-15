@@ -72,11 +72,6 @@ const LoginSignupForm = () => {
         const { token, user } = await response.data;
         console.log(user);
         Auth.login(token);
-
-        // const { token, user } = await response.json();
-        // console.log(user);
-        // onLogin();
-        // Auth.login(response.data.token);
         
 
         // console.log(response.data);

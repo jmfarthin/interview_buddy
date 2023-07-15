@@ -3,16 +3,18 @@ import { FiSend, FiMic } from 'react-icons/fi';
 import { useReactMediaRecorder } from "react-media-recorder";
 
 
+// const ChatComponent = ({ state }) => {
+
 const ChatComponent = ({ state }) => {
   const [newMessage, setNewMessage] = useState('');
   const [isListening, setIsListening] = useState(false);
     
-  const {
-    status,
-    startRecording,
-    stopRecording,
-    mediaBlobUrl,
-  } = useReactMediaRecorder({ audio: true });
+  // const {
+  //   status,
+  //   startRecording,
+  //   stopRecording,
+  //   mediaBlobUrl,
+  // } = useReactMediaRecorder({ audio: true });
 
   const handleNewMessageChange = event => {
     setNewMessage(event.target.value);
@@ -21,58 +23,58 @@ const ChatComponent = ({ state }) => {
   const handleListen = async (event) => {
     event.preventDefault();
 
-    if (status === "recording") {
-      stopRecording();
-    } else {
-      startRecording();
-    }
+    // if (status === "recording") {
+    //   stopRecording();
+    // } else {
+    //   startRecording();
+    // }
   };
 
   const handleSendMessage = async event => {
     event.preventDefault();
 
-    let fetchUrl = 'http://localhost:3001/graphql';
-    let fetchOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        query: `
-          mutation {
-            createMessage(input: {
-              content: "${newMessage}"
-            }) {
-              id
-              content
-            }
-          }
-        `,
-      }),
-    };
+    // let fetchUrl = 'http://localhost:3001/graphql';
+    // let fetchOptions = {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({
+    //     query: `
+    //       mutation {
+    //         createMessage(input: {
+    //           content: "${newMessage}"
+    //         }) {
+    //           id
+    //           content
+    //         }
+    //       }
+    //     `,
+    //   }),
+    // };
 
 
-    if (mediaBlobUrl) {
-      const audioBlob = await fetch(mediaBlobUrl).then(res => res.blob());
+    // if (mediaBlobUrl) {
+    //   const audioBlob = await fetch(mediaBlobUrl).then(res => res.blob());
 
-      let formData = new FormData();
-      formData.append('audio', audioBlob, 'audio.wav');
+    //   let formData = new FormData();
+    //   formData.append('audio', audioBlob, 'audio.wav');
 
-      fetchUrl = 'http://localhost:3001/api/voice';
-      fetchOptions = {
-        method: 'POST',
-        body: formData,
-      };
-    }
+    //   fetchUrl = 'http://localhost:3001/api/voice';
+    //   fetchOptions = {
+    //     method: 'POST',
+    //     body: formData,
+    //   };
+    // }
 
-    fetch(fetchUrl, fetchOptions)
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-        // will handle the response data or error here
-      })
-      .catch(err => {
-        console.error(err);
-        // will handle any network errors here
-      });
+    // fetch(fetchUrl, fetchOptions)
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     console.log(data);
+    //     // will handle the response data or error here
+    //   })
+    //   .catch(err => {
+    //     console.error(err);
+    //     // will handle any network errors here
+    //   });
 
     setNewMessage('');
   };
@@ -90,6 +92,8 @@ const ChatComponent = ({ state }) => {
               value={newMessage}
               onChange={handleNewMessageChange}
           />
+          {/* <button onClick={handleListen} type='button' className='absolute right-12 top-1/2 transform -translate-y-1/2 p-3 bg-brandGray text-white rounded-md'> */}
+
           <button onClick={handleListen} type='button' className='absolute right-12 top-1/2 transform -translate-y-1/2 p-3 bg-brandGray text-white rounded-md'>
               <FiMic size={23} color={isListening ? '#ff0000' : '#8C52FF'} />
           </button>
