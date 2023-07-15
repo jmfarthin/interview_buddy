@@ -13,6 +13,12 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [inProp, setInProp] = useState(false);
+  const [chatId, setChatId] = useState('ChatID');
+
+  function updateChatId(newChatId) {
+    setChatId(newChatId);
+    console.log(chatId);
+  };
 
   useEffect(() => {
     // if (isLoggedIn) {
@@ -30,15 +36,16 @@ const App = () => {
     <Router>
       <div className="App">
         <Routes>
-        {/* <Route path="/" element={isLoggedIn ? <Navigate to="/app" /> : <LoginSignupForm onLogin={() => setIsLoggedIn(true)} />} /> */}
+          {/* <Route path="/" element={isLoggedIn ? <Navigate to="/app" /> : <LoginSignupForm onLogin={() => setIsLoggedIn(true)} />} /> */}
 
-          <Route path="/" element={Auth.loggedIn() ?  <Navigate to= "/app" /> : <LoginSignupForm/>} />
+          <Route path="/" element={Auth.loggedIn() ? <Navigate to="/app" /> : <LoginSignupForm />} />
           {/* <Route path="/app" element={isLoggedIn ? ( */}
           <Route path="/app" element={Auth.loggedIn() ? (
             <>
               <div className="flex flex-col items-center justify-center">
                 <HeaderComponent isMenuOpen={isMenuOpen} inProp={inProp} />
-                <NewInterviewForm />
+                <NewInterviewForm changeChatId={updateChatId} />
+                <p>chatId</p>
                 <Transition in={inProp} timeout={300}>
                   {(state) => <ChatComponent state={state} />}
                 </Transition>

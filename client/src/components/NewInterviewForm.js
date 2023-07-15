@@ -1,26 +1,39 @@
 import React, { useState, forwardRef } from 'react';
 import { FiX } from 'react-icons/fi';
 import { motion } from 'framer-motion';
+import { CREATE_CHAT } from '../utils/mutations';
+import { useMutation, ApolloError } from '@apollo/client';
 
 const formVariants = {
     hidden: { opacity: 0, scale: 0.9 },
     visible: { opacity: 1, scale: 1 },
 };
 
-const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose }, ref) => {
+const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose, changeChatId }, ref) => {
     const [jobTitle, setJobTitle] = useState('');
     const [jobLevel, setJobLevel] = useState('');
     const [jobFunction, setJobFunction] = useState('');
     const [jobTechnology, setJobTechnology] = useState('');
 
-    const handleSubmit = event => {
+
+    // CREATE CHAT INSTANCE--SAVES THE INITIAL CHAT PROMPT TO DATABASE AND RETURNS NEW CHAT
+    const [createChat, { error }] = useMutation(CREATE_CHAT);
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
         if (!jobTitle || !jobLevel || !jobFunction || !jobTechnology) {
             alert('All fields are required.');
         } else {
             console.log({ jobTitle, jobLevel, jobFunction, jobTechnology });
-            // API call to send these values to be added later.
+            // call to create new chat
+            try {
+                const { data } = await createChat({ variables: { jobTitle, jobLevel, jobFunction, jobTechnology } });
+                console.log(data.createChat._id);
+                changeChatId(data.createChat._id);
+            } catch (error) {
+                console.log(error);
+                throw new ApolloError("Failed to create Chat!");
+            }
         }
     };
 
@@ -97,24 +110,24 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose }, 
                         className="tools-input mt-2 block w-full px-4 py-2 bg-brandGreen rounded-lg"
                     />
                 </label>
-                
-                <motion.button 
-                    whileHover={{ scale: 1.1 }} 
-                    whileTap={{ scale: 0.9 }} 
-                    type='submit' 
+
+                <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    type='submit'
                     className="rounded-full bg-gradient mt-4 px-6 py-3 col-span-2 self-center brand-font-bold text-lg text-white"
                 >
                     Start Interview
                 </motion.button>
 
-                <motion.button 
-                    whileHover={{ 
-                        scale: 1.1, 
+                <motion.button
+                    whileHover={{
+                        scale: 1.1,
                         rotate: 360
-                    }} 
-                    whileTap={{ scale: 0.9 }} 
-                    type='button' 
-                    style={{ position: 'absolute', top: '-38px', left: '0px' }} 
+                    }}
+                    whileTap={{ scale: 0.9 }}
+                    type='button'
+                    style={{ position: 'absolute', top: '-38px', left: '0px' }}
                     onClick={onClose}
                 >
                     <FiX size={35} color='#8C52FF' />
