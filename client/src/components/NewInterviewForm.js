@@ -29,7 +29,9 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose, ch
             try {
                 const { data } = await createChat({ variables: { jobTitle, jobLevel, jobFunction, jobTechnology } });
                 console.log(data.createChat._id);
-                changeChatId(data.createChat._id);
+                localStorage.setItem('chat_id', data.createChat._id);
+                onClose();
+                // changeChatId(data.createChat._id);
             } catch (error) {
                 console.log(error);
                 throw new ApolloError("Failed to create Chat!");
