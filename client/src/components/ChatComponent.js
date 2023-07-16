@@ -10,7 +10,8 @@ const ChatComponent = ({ state, setMessages, messages, chatId }) => {
   const [promptChat, { error }] = useMutation(PROMPT_CHAT);
   const [newAnswer, setNewAnswer] = useState('');
 
-  const handleAnswerRachel = async () => {
+  const handleAnswerRachel = async (e) => {
+    e.preventDefault();
     try {
       const message = await promptChat({ variables: { chatId, answer: newAnswer } });
       if (!message) {
@@ -24,8 +25,8 @@ const ChatComponent = ({ state, setMessages, messages, chatId }) => {
   };
 
 
-  return (<div
-    className={`chat-component chat-component-${state} absolute bottom-0 left-0 right-0 mx-auto w-full bg-brandGreen p-5 shadow-lg flex justify-center items-center`}
+  return (<form
+    className={`chat-component chat-component-${state} absolute bottom-0 left-0 right-0 mx-auto w-full bg-brandGreen p-5 shadow-lg flex justify-center items-center`} onSubmit={handleAnswerRachel}
   >
     <div className="relative w-full md:w-4/6">
       <input
@@ -35,11 +36,11 @@ const ChatComponent = ({ state, setMessages, messages, chatId }) => {
         value={newAnswer}
         onChange={(answer) => setNewAnswer(answer.target.value)}
       />
-      <button onClick={handleAnswerRachel} className='absolute right-4 top-1/2 transform -translate-y-1/2 p-3 bg-brandGray text-white rounded-md'>
+      <button  type='submit' className='absolute right-4 top-1/2 transform -translate-y-1/2 p-3 bg-brandGray text-white rounded-md'>
         <FiSend size={23} color='#8C52FF' />
       </button>
     </div>
-  </div>
+  </form>
   );
 }
 
