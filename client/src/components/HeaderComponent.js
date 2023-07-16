@@ -4,6 +4,7 @@ import { FaPlus } from 'react-icons/fa';
 import logo from '../InterviewBuddy-Logo2.png';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import Auth from '../utils/auth';
 
 const HeaderComponent = ({ isMenuOpen, inProp, setMessages, setChatId, messages }) => {
     const [showForm, setShowForm] = useState(false);
@@ -49,6 +50,7 @@ const HeaderComponent = ({ isMenuOpen, inProp, setMessages, setChatId, messages 
                         </motion.button>
                     )}
                     {showForm && <NewInterviewForm showForm={showForm} onClose={handleShowForm} setMessages={setMessages} setChatId={setChatId} messages={messages} />}
+                    {Auth.loggedIn() ? (<button onClick={Auth.logout}>Logout</button>) : ''}
                 </div>
             </header>
         </>
