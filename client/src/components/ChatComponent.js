@@ -13,12 +13,14 @@ const ChatComponent = ({ state, setMessages, messages, chatId }) => {
   const handleAnswerRachel = async (e) => {
     e.preventDefault();
     try {
-      const message = await promptChat({ variables: { chatId, answer: newAnswer } });
+      var answerHolder = newAnswer;
+      setNewAnswer('');
+      setMessages([...messages, {text: answerHolder, isUser: true }]);
+      const message = await promptChat({ variables: { chatId, answer: answerHolder } });
       if (!message) {
         throw new Error('Failed openAI call!')
       }
       setMessages([...messages, { text: newAnswer, isUser: true }, { text: message.data.promptChat.gptMessage, isUser: false }]);
-      setNewAnswer('');
     } catch (error) {
       console.log(error);
     };

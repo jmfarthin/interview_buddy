@@ -57,7 +57,7 @@ const App = () => {
                   {(state) => <ChatComponent state={state} setMessages={setMessages} messages={messages} chatId={chatId} />}
                 </Transition>
                 <div ref={chatRef} className='mt-10 flex flex-col overflow-y-auto w-2/3 h-3/4 p-8' style={{ maxHeight: '75vh' }}>
-                  {messages.map((message, index) => (<div key={index} className={message.isUser ? 'user' : 'rachel'}>{message.text}</div>))}
+                  {messages.map((message, index) => (<div key={++index} className={message.isUser ? 'user' : 'rachel'}>{message.text}</div>))}
                 </div>
               </div>
 
