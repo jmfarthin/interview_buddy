@@ -43,7 +43,7 @@ const resolvers = {
 
             return { token, user };
         },
-        createChat: async (parent, { jobTitle, jobLevel, jobFunction, technologies }, context) => {
+        createChat: async (parent, { jobTitle, jobLevel, jobFunction, jobTechnology }, context) => {
             console.log(context.user);
             if (context.user) {
                 console.log("CREATING CHAT")
@@ -54,7 +54,7 @@ const resolvers = {
                     jobTitle, messages: [
                         {
                             role: "system",
-                            content: `You are Rachel, an interviewer. The candidate you are interviewing is ${context.user.firstname} and they are interviewing for the ${jobLevel} ${jobTitle} role, which pertains to the ${jobFunction} field. Include questions about these technologies, if applicable: ${technologies}. Please keep questions and responses brief and ask one question at a time--do not list questions and wait for a response before asking the next question. Start the interview by introducing yourself after the candidate prompts with 'Begin interview'.`
+                            content: `You are Rachel, an interviewer. The candidate you are interviewing is ${context.user.firstname} and they are interviewing for the ${jobLevel} ${jobTitle} role, which pertains to the ${jobFunction} field. Include questions about these technologies, if applicable: ${jobTechnology}. Please keep questions and responses brief and ask one question at a time--do not list questions and wait for a response before asking the next question. Start the interview by introducing yourself after the candidate prompts with 'Begin interview'.`
                         },
                         {
                             role: "user",
@@ -133,8 +133,8 @@ const resolvers = {
             };
             throw new AuthenticationError('You need to be logged in!');
         },
-        generateAudio: async (parent, {textInput}) => {
-            
+        generateAudio: async (parent, { textInput }) => {
+
             try {
                 console.log(textInput);
                 elevenLabsAPI(textInput);
@@ -142,7 +142,7 @@ const resolvers = {
             } catch (err) {
                 return "FAILED";
             }
-            
+
         }
 
     }

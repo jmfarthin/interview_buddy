@@ -41,7 +41,7 @@ type Mutation {
     addUser(firstname: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
     promptChat(chatId: String!, answer: String!): GptResponse
-    createChat(jobTitle: String!, jobLevel: String!, jobFunction: String!, technologies: String): Chat
+    createChat(jobTitle: String!, jobLevel: String!, jobFunction: String!, jobTechnology: String): Chat
     generateAudio(textInput: String!): String
 } 
 `

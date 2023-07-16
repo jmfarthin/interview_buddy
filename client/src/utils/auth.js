@@ -10,6 +10,8 @@ class AuthService {
 
     loggedIn() {
         const token = this.getToken();
+        console.log(token);
+
         return !!token && !this.isTokenExpired(token);
     }
 
@@ -30,7 +32,7 @@ class AuthService {
 
     login(idToken) {
         localStorage.setItem('id_token', idToken);
-        window.location.assign('/');
+        window.location.assign('/app');
         // We can reassess this line depending on what we make the main page
     }
 
@@ -41,3 +43,5 @@ class AuthService {
 
     }
 }
+
+export default new AuthService();

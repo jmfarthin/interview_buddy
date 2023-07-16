@@ -9,8 +9,8 @@ mutation promptChat($chatId: String!, $answer: String!) {
 `
 
 export const CREATE_CHAT = gql`
-mutation createChat($jobTitle: String!, $jobLevel: String!, $jobFunction: String!, $technologies: String) {
-  createChat(jobTitle: $jobTitle, jobLevel: $jobLevel, jobFunction: $jobFunction, technologies: $technologies) {
+mutation createChat($jobTitle: String!, $jobLevel: String!, $jobFunction: String!, $jobTechnology: String) {
+  createChat(jobTitle: $jobTitle, jobLevel: $jobLevel, jobFunction: $jobFunction, jobTechnology: $jobTechnology) {
     _id
     jobTitle
   }
@@ -22,6 +22,7 @@ mutation login($email: String!, $password: String!) {
   login(email: $email, password: $password) {
     token
     user {
+      _id
       firstname
       chats {
         _id
@@ -41,6 +42,7 @@ mutation addUser($firstname: String!, $email: String!, $password: String!) {
   addUser(firstname: $firstname, email: $email, password: $password) {
     token
     user {
+      _id
       firstname
     }
   }
