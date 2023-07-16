@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { FiMessageCircle, FiMoreHorizontal, FiMenu, FiX } from 'react-icons/fi';
+import { FaSignOutAlt } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
+import Auth from '../utils/auth';
 
 const ChatHistory = ({ onMenuToggle }) => {
     const [chatHistory, setChatHistory] = useState([
@@ -50,7 +52,8 @@ const ChatHistory = ({ onMenuToggle }) => {
                 </div>
             )}
             <aside className={`chat-history fixed top-0 right-0 transform transition-transform duration-200 ease-in-out ${openMobileMenu ? 'translate-x-0' : 'translate-x-full'} xl:translate-x-0 w-56 h-screen bg-gray-600 overflow-y-auto overflow-x-hidden p-3`}>
-                <h2 className='brand-font-bold text-white text-center text-xl mb-4 custom-border-top pl-2'>Interview History</h2>
+                {Auth.loggedIn() ? (<button className="brand-font-bold text-brandGreen text-lg fixed top-0 right-0 p-3" onClick={Auth.logout}><span className="flex items-center"><FaSignOutAlt className="mr-1"/>Logout</span></button>) : ''}
+                <h2 className='brand-font-bold text-white text-center text-xl mb-4 custom-border-top pt-10 pl-2'>Interview History</h2>
                 {chatHistory.map((message) => (
                     <div key={message.id} className='chat-message flex items-center p-2'>
                         <FiMessageCircle size={22} className='text-gray-300' />
