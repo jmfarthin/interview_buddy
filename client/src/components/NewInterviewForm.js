@@ -1,7 +1,7 @@
 import React, { useState, forwardRef } from 'react';
 import { FiX } from 'react-icons/fi';
 import { motion } from 'framer-motion';
-import { CREATE_CHAT } from '../utils/mutations';
+import { CREATE_CHAT, PROMPT_CHAT } from '../utils/mutations';
 import { useMutation, ApolloError } from '@apollo/client';
 
 const formVariants = {
@@ -9,7 +9,7 @@ const formVariants = {
     visible: { opacity: 1, scale: 1 },
 };
 
-const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose, changeChatId }, ref) => {
+const NewInterviewForm = ({ styles, attributes, showForm, onClose, setMessages, setChatId, messages }) => {
     const [jobTitle, setJobTitle] = useState('');
     const [jobLevel, setJobLevel] = useState('');
     const [jobFunction, setJobFunction] = useState('');
@@ -17,20 +17,24 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose, ch
 
 
     // CREATE CHAT INSTANCE--SAVES THE INITIAL CHAT PROMPT TO DATABASE AND RETURNS NEW CHAT
-    const [createChat, { error }] = useMutation(CREATE_CHAT);
+    const [createChat, { createChatError }] = useMutation(CREATE_CHAT);
+    const [promptChat, { promptChatError }] = useMutation(PROMPT_CHAT);
     const handleSubmit = async (event) => {
         event.preventDefault();
-
         if (!jobTitle || !jobLevel || !jobFunction || !jobTechnology) {
             alert('All fields are required.');
         } else {
             console.log({ jobTitle, jobLevel, jobFunction, jobTechnology });
             // call to create new chat
             try {
+                onClose();
                 const { data } = await createChat({ variables: { jobTitle, jobLevel, jobFunction, jobTechnology } });
                 console.log(data.createChat._id);
-                localStorage.setItem('chat_id', data.createChat._id);
-                onClose();
+                setChatId(data.createChat._id);
+                const message = await promptChat({ variables: { chatId: data.createChat._id, answer: "" } })
+                setMessages([...messages, { text: message.data.promptChat.gptMessage, isUser: false }]);
+                console.log(message.data.promptChat.gptMessage);
+
                 // changeChatId(data.createChat._id);
             } catch (error) {
                 console.log(error);
@@ -45,6 +49,7 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose, ch
 
     return (
         <div className="fixed inset-0 flex items-center justify-center z-10">
+
             <motion.form
                 initial="hidden"
                 animate="visible"
@@ -138,6 +143,6 @@ const NewInterviewForm = forwardRef(({ styles, attributes, showForm, onClose, ch
             </motion.form>
         </div>
     );
-})
+};
 
 export default NewInterviewForm;
