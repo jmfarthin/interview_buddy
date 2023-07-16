@@ -33,7 +33,9 @@ const App = () => {
 
   const scrollToBottom = () => {
     if (chatRef.current) {
-      chatRef.current.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+      // chatRef.current.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+      var objDiv = document.getElementById("mainScroll");
+      objDiv.scrollTop = objDiv.scrollHeight;
     }
   };
 
@@ -56,7 +58,7 @@ const App = () => {
                 <Transition in={inProp} timeout={300}>
                   {(state) => <ChatComponent state={state} setMessages={setMessages} messages={messages} chatId={chatId} />}
                 </Transition>
-                <div ref={chatRef} className='mt-10 flex flex-col overflow-y-auto w-2/3 h-3/4 p-8' style={{ maxHeight: '75vh' }}>
+                <div ref={chatRef} id='mainScroll' className='mt-10 flex flex-col overflow-y-auto w-2/3 h-3/4 p-8' style={{ maxHeight: '75vh' }}>
                   {messages.map((message, index) => (<div key={index} className={message.isUser ? 'user' : 'rachel'}>{message.text}</div>))}
                 </div>
               </div>
