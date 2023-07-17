@@ -1,8 +1,6 @@
 # InterviewBuddy
 ![Logo](logo_url)
-![GitHub issues](https://img.shields.io/github/issues-raw/jmfarthin/InterviewBuddy)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/jmfarthin/InterviewBuddy)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/jmfarthin/InterviewBuddy)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/jmfarthin/interview_buddy)
 
 InterviewBuddy is an innovative, AI-driven application that uses the MERN stack (MongoDB, Express, React, and Node.js), OpenAI's ChatGPT API, Whisper ASR API, and Eleven Labs Text-to-Speech API to simulate realistic technical interviews. Users can specify the type and level of the technical role they're preparing for, as well as the relevant technologies necessary for the position. InterviewBuddy then assumes the role of the interviewer and asks a series of relevant questions. Past interviews can be stored and reviewed at a later stage, making interview practice more efficient and user-focused.
 
@@ -27,7 +25,6 @@ The tech industry has never been more competitive. Job seekers for the most desi
 
 - AI-driven technical interviews
 - User-configurable interview parameters
-- Reviewable past interviews
 - High-quality text-to-speech and speech-to-text capabilities
 - Modern, responsive interface styled with Tailwind CSS
 
@@ -55,11 +52,18 @@ To get a local copy up and running, follow these steps.
 1. Set the type and level of the technical role for your mock interview.
 2. Specify the relevant technologies required for the position.
 3. Start the interview and answer the AI interviewer's questions.
-4. Past interviews can be accessed and reviewed for progress tracking and future preparations.
+
+### Screenshots:
+
+![Interview Buddy 1](./client/assets/images/interviewbuddy1.png)
+![Invterview Buddy 2](./client/assets/images/interviewbuddy2.png)
+![Interview Buddy 3](./client/assets/images/interviewbuddy3.png)
 
 ## Deployment
 
-The application is stored and can be accessed at https://github.com/jmfarthin/project-3.
+The application is stored and can be accessed at https://github.com/jmfarthin/interview_buddy.
+
+Video available here: https://youtu.be/x6p0X_8aBPQ
 
 ## Built With
 
