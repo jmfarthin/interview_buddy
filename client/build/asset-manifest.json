@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.874804fe.css",
+    "main.js": "/static/js/main.e84ff08a.js",
+    "static/js/522.2e23dda4.chunk.js": "/static/js/522.2e23dda4.chunk.js",
+    "static/media/InterviewBuddy-Logo2.png": "/static/media/InterviewBuddy-Logo2.d43b4608e866c813d253.png",
+    "index.html": "/index.html",
+    "main.874804fe.css.map": "/static/css/main.874804fe.css.map",
+    "main.e84ff08a.js.map": "/static/js/main.e84ff08a.js.map",
+    "522.2e23dda4.chunk.js.map": "/static/js/522.2e23dda4.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.874804fe.css",
+    "static/js/main.e84ff08a.js"
+  ]
+}
