@@ -68,9 +68,10 @@ const LoginSignupForm = () => {
             throw new Error('something went wrong!');
         }
 
-        console.log(response);
-        const { token, user } = await response.data;
-        console.log(user);
+        // console.log(response);
+        const { token, user } = await response.data.addUser;
+        // console.log(token);
+        // console.log(user);
         Auth.login(token);
         
 
