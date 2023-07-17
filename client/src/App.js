@@ -58,8 +58,12 @@ const App = () => {
                 <Transition in={inProp} timeout={300}>
                   {(state) => <ChatComponent state={state} setMessages={setMessages} messages={messages} chatId={chatId} />}
                 </Transition>
-                <div ref={chatRef} id='mainScroll' className='mt-10 flex flex-col overflow-y-auto w-2/3 h-3/4 p-8' style={{ maxHeight: '75vh' }}>
-                  {messages.map((message, index) => (<div key={index} className={message.isUser ? 'user' : 'rachel'}>{message.text}</div>))}
+                <div ref={chatRef} id='mainScroll' className='mt-10 flex flex-col overflow-y-auto w-full h-full md:w-2/3 md:h-3/4 p-8' style={{ maxHeight: '75vh' }}>
+                  {messages.map((message, index) => (
+                    <div key={index} className={`${message.isUser ? 'user' : 'rachel'} w-full md:w-2/3 my-2 p-4 bg-blue-500 text-white rounded-lg`}>
+                      {message.text}
+                    </div>
+                  ))}
                 </div>
               </div>
 

@@ -3,6 +3,7 @@ import { FiMessageCircle, FiMoreHorizontal, FiMenu, FiX } from 'react-icons/fi';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import Auth from '../utils/auth';
+import jwt_decode from 'jwt-decode';
 
 const ChatHistory = ({ onMenuToggle }) => {
     const [chatHistory, setChatHistory] = useState([
@@ -13,6 +14,7 @@ const ChatHistory = ({ onMenuToggle }) => {
 
     const [showMenu, setShowMenu] = useState(false);
     const [openMobileMenu, setOpenMobileMenu] = useState(false);
+    const [userEmail, setUserEmail] = useState(""); // New state for the user's email
     const navigate = useNavigate();
 
     const handleMenuClick = () => {
@@ -31,8 +33,8 @@ const ChatHistory = ({ onMenuToggle }) => {
     };
 
     useEffect(() => {
-        // Once backend is ready, we will replace the mock data with real server data
-        // fetch('http://localhost:3001/graphql', ...)
+        const profile = Auth.getProfile();
+        setUserEmail(profile.email);
     }, []);
 
     return (
@@ -60,8 +62,8 @@ const ChatHistory = ({ onMenuToggle }) => {
                         <p className='text-gray-200 ml-2'>{message.content}</p>
                     </div>
                 ))}
-                <div className='absolute bottom-0 w-full bg-gray-600 text-white p-4 pb-6 flex justify-between items-center custom-border-bottom mr-2' onClick={handleMenuClick}>
-                    <p>user@example.com</p>
+                <div className='absolute bottom-0 w-full bg-gray-600 text-white p-4 pb-8 flex justify-between items-center custom-border-bottom mr-2' onClick={handleMenuClick}>
+                    <p className="text-sm">{userEmail}</p>
                     <FiMoreHorizontal className='text-gray-200 mr-3' />
                 </div>
                 {showMenu && (

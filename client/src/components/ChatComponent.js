@@ -32,7 +32,7 @@ const ChatComponent = ({ state, setMessages, messages, chatId }) => {
   >
     <div className="relative w-full md:w-4/6">
       <input
-        className='chat-input flex-grow bg-brandGray p-3 rounded-full w-full'
+        className='chat-input flex-grow bg-brandGray p-3 rounded-full w-full pr-12'
         type='text'
         placeholder='Send Reply'
         value={newAnswer}
